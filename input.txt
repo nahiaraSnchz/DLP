@@ -1,0 +1,18 @@
+/*
+NOTA. Este ejemplo solo pretende mostrar la sintaxis del lenguaje mediante fragmentos de código inconexos.
+No está pensado para ser ejecutado ya que no realiza ninguna tarea concreta.
+
+Aclaraciones:
+- La sintaxis tiene que ser obligatoriamente la que se muestra en este ejemplo
+- Las declaraciones de funciones y variables globales pueden venir en cualquier orden.
+- Si la función no tiene valor de retorno no se pone nada entre los paréntesis de los parámetros y las llaves de las sentencias
+- Las funciones deben tener paréntesis aunque no tengan parámetros
+- Una función podrá declarar variables locales solo al inicio de su cuerpo. Por tanto no podrá haber declaración de variables locales en cualquier lugar de la función ni dentro de bloques anidados (por ejemplo el creado por un while)
+- No pueden aparecer expresiones como sentencias
+- Las llaves son obligatorias en el if/while aunque solo haya una sentencia dentro. También son obligatorios los paréntesis alrededor de la condición
+*/
+
+main() {
+	escribeEdad(local);
+  
+}

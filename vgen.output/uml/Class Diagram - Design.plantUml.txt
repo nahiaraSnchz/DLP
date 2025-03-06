@@ -1,0 +1,221 @@
+' Generated with VGen 2.0.0
+
+@startuml
+
+class Position {
+    +int getLine()
+    +int getColumn()
+    +boolean lessThan(Position other)
+    +boolean greaterThan(Position other)
+}
+
+interface AST {
+    +updatePositions(Object... children)
+    +updatePositions(Position start, Position end)
+    +Object accept(Visitor visitor, Object param)
+}
+
+AST *-[#404040,thickness=1]- Position : start >
+AST *-[#404040,thickness=1]- Position : end >
+
+
+interface Type {
+}
+AST <|-[#808080]- Type
+
+interface Statement {
+}
+AST <|-[#808080]- Statement
+
+interface Expression {
+}
+AST <|-[#808080]- Expression
+
+interface Declaration {
+}
+AST <|-[#808080]- Declaration
+
+interface AST {
+}
+
+class Program {
+}
+AST <|-[#808080]- Program
+Program o-[#404040,thickness=2]- "✱" Declaration : declarations >
+
+class Variable_definition {
+	+String name
+}
+Declaration <|-[#808080]- Variable_definition
+Variable_definition o-[#404040,thickness=2]-  Type : type >
+
+class Struct_definition {
+	+String name
+}
+Declaration <|-[#808080]- Struct_definition
+Struct_definition o-[#404040,thickness=2]- "✱" Local_variable : local_variables >
+
+class Function_definition {
+	+String name
+}
+Declaration <|-[#808080]- Function_definition
+Function_definition o-[#404040,thickness=2]- "✱" Local_variable : local_variables >
+Function_definition o-[#404040,thickness=2]- "0..1" Type : type >
+Function_definition o-[#404040,thickness=2]- "✱" Variable_definition : variable_definitions >
+Function_definition o-[#404040,thickness=2]- "✱" Statement : statements >
+
+class Return_statement {
+}
+Statement <|-[#808080]- Return_statement
+Return_statement o-[#404040,thickness=2]- "0..1" Expression : expression >
+
+class Print_statement {
+}
+Statement <|-[#808080]- Print_statement
+Print_statement o-[#404040,thickness=2]- "✱" Expression : expressions >
+
+class Printsp_statement {
+}
+Statement <|-[#808080]- Printsp_statement
+Printsp_statement o-[#404040,thickness=2]- "✱" Expression : expressions >
+
+class Println_statement {
+}
+Statement <|-[#808080]- Println_statement
+Println_statement o-[#404040,thickness=2]- "✱" Expression : expressions >
+
+class Read_statement {
+}
+Statement <|-[#808080]- Read_statement
+Read_statement o-[#404040,thickness=2]-  Expression : expression >
+
+class While_statement {
+}
+Statement <|-[#808080]- While_statement
+While_statement o-[#404040,thickness=2]-  Expression : expression >
+While_statement o-[#404040,thickness=2]- "✱" Statement : statements >
+
+class If_statement {
+}
+Statement <|-[#808080]- If_statement
+If_statement o-[#404040,thickness=2]-  Expression : expression >
+If_statement o-[#404040,thickness=2]- "✱" Statement : st1 >
+If_statement o-[#404040,thickness=2]- "✱" Statement : st2 >
+
+class Assigment_statement {
+}
+Statement <|-[#808080]- Assigment_statement
+Assigment_statement o-[#404040,thickness=2]-  Expression : left >
+Assigment_statement o-[#404040,thickness=2]-  Expression : right >
+
+class Function_call_statement {
+	+String name
+}
+Statement <|-[#808080]- Function_call_statement
+Function_call_statement o-[#404040,thickness=2]- "✱" Expression : expressions >
+
+class Arythmetic_expression {
+	+String operador
+}
+Expression <|-[#808080]- Arythmetic_expression
+Arythmetic_expression o-[#404040,thickness=2]-  Expression : left >
+Arythmetic_expression o-[#404040,thickness=2]-  Expression : right >
+
+class Cast_expression {
+}
+Expression <|-[#808080]- Cast_expression
+Cast_expression o-[#404040,thickness=2]-  Type : type >
+Cast_expression o-[#404040,thickness=2]-  Expression : expression >
+
+class Comparative_expression {
+	+String operador
+}
+Expression <|-[#808080]- Comparative_expression
+Comparative_expression o-[#404040,thickness=2]-  Expression : left >
+Comparative_expression o-[#404040,thickness=2]-  Expression : right >
+
+class Logical_expression {
+	+String operador
+}
+Expression <|-[#808080]- Logical_expression
+Logical_expression o-[#404040,thickness=2]-  Expression : left >
+Logical_expression o-[#404040,thickness=2]-  Expression : right >
+
+class Parenthesized_expression {
+}
+Expression <|-[#808080]- Parenthesized_expression
+Parenthesized_expression o-[#404040,thickness=2]-  Expression : expression >
+
+class Expression_call {
+	+String name
+}
+Expression <|-[#808080]- Expression_call
+Expression_call o-[#404040,thickness=2]- "✱" Expression : expressions >
+
+class Variable_access {
+	+String name
+}
+Expression <|-[#808080]- Variable_access
+Variable_access o-[#404040,thickness=2]-  Expression : expression >
+
+class Array_access {
+}
+Expression <|-[#808080]- Array_access
+Array_access o-[#404040,thickness=2]-  Expression : left >
+Array_access o-[#404040,thickness=2]-  Expression : right >
+
+class IntE_literal {
+	+String name
+}
+Expression <|-[#808080]- IntE_literal
+
+class IntE_real {
+	+String name
+}
+Expression <|-[#808080]- IntE_real
+
+class CharE_literal {
+	+String name
+}
+Expression <|-[#808080]- CharE_literal
+
+class IdE {
+	+String name
+}
+Expression <|-[#808080]- IdE
+
+class Local_variable {
+	+String name
+}
+AST <|-[#808080]- Local_variable
+Local_variable o-[#404040,thickness=2]-  Type : type >
+
+class Int_type {
+}
+Type <|-[#808080]- Int_type
+
+class Real_type {
+}
+Type <|-[#808080]- Real_type
+
+class Char_type {
+}
+Type <|-[#808080]- Char_type
+
+class Id_type {
+}
+Type <|-[#808080]- Id_type
+
+class Array_type {
+	+String name
+}
+Type <|-[#808080]- Array_type
+Array_type o-[#404040,thickness=2]-  Type : type >
+
+class Return_list {
+}
+Expression <|-[#808080]- Return_list
+Return_list o-[#404040,thickness=2]-  Expression : left >
+Return_list o-[#404040,thickness=2]-  Expression : right >
+
+@enduml

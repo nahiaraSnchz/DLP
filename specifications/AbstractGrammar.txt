@@ -1,0 +1,47 @@
+CATEGORIES
+type;
+statement;
+expression;
+declaration;
+
+NODES
+
+
+program -> declaration*;
+
+Variable_definition:declaration -> string type;
+Struct_definition:declaration -> string local_variable*;
+Function_definition:declaration -> string local_variable* type? Variable_definition* statement*;
+Return_statement:statement -> expression?;
+Print_statement:statement -> expression*;
+Printsp_statement:statement -> expression*;
+Println_statement:statement -> expression*;
+Read_statement:statement -> expression;
+While_statement:statement -> expression statement*;
+If_statement:statement -> expression st1:statement* st2:statement*;
+Assigment_statement:statement -> left:expression right:expression;
+Function_call_statement:statement -> string expression*;
+
+Arythmetic_expression:expression -> left:expression operador:string right:expression;
+Cast_expression:expression -> type expression;
+Comparative_expression:expression -> left:expression operador:string right:expression;
+Logical_expression:expression -> left:expression operador:string right:expression;
+Parenthesized_expression:expression -> expression;
+Expression_call:expression -> string expression*;
+Variable_access:expression -> expression string;
+Array_access:expression -> left:expression right:expression;
+IntE_literal:expression -> string;
+IntE_real:expression -> string;
+CharE_literal:expression -> string;
+IdE:expression -> string;
+
+local_variable -> string type;
+
+Int_type:type -> ;
+Real_type:type -> ;
+Char_type:type -> ;
+Id_type:type -> ;
+Array_type:type -> string type ;
+
+
+Return_list:expression -> left:expression right:expression;
