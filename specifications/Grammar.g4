@@ -25,23 +25,23 @@ declaration returns[Declaration ast]
 	| function_definition { $ast = $function_definition.ast; }
 	;
 
-statement returns[Statement ast] locals [List<Expression> expressions = new ArrayList<>(), List<Statement> statements = new ArrayList<>()]
+statement returns[Statement ast] locals [List<Expression> expressions = new ArrayList<>(), List<Statement> statements1 = new ArrayList<>(), List<Statement> statements2 = new ArrayList<>()]
 	: 'return'
 	  {$ast = new Return_statement(null);}
 	|'return' e1=expression
 	 { $ast = new Return_statement($e1.ast); }
-	| 'print' (expression { $expressions.add($expression.ast);})* 
+	| 'print' (exp1=expression { $expressions.add($exp1.ast);} (',' exp2=expression { $expressions.add($exp2.ast);})*)* 
 	 { $ast = new Print_statement($expressions); }
-	| 'printsp' (expression { $expressions.add($expression.ast);})*  
+	| 'printsp' (exp1=expression { $expressions.add($exp1.ast);} (',' exp2=expression { $expressions.add($exp2.ast);})*)*  
 	 { $ast = new Printsp_statement($expressions); }
-	| 'println' (expression {$expressions.add($expression.ast);})*
+	| 'println' (exp1=expression { $expressions.add($exp1.ast);} (',' exp2=expression { $expressions.add($exp2.ast);})*)*
 	 { $ast = new Println_statement($expressions); }
 	| 'read' expression 
 	 { $ast = new Read_statement($expression.ast); }
-	| 'while' '(' expression ')' '{' (operator2=statement {$statements.add($operator2.ast);} )* '}'
-	 { $ast = new While_statement($expression.ast, $statements); }
-	| 'if' '(' expression ')'  ('{'b1=block {$statements=$b1.ast;} '}')?  ( 'else' '{' b2=block {$statements=$b2.ast;} '}')?
-	 { $ast = new If_statement($expression.ast, $statements, $statements); }
+	| 'while' '(' expression ')' '{' (operator2=statement {$statements1.add($operator2.ast);} )* '}'
+	 { $ast = new While_statement($expression.ast, $statements1); }
+	| 'if' '(' expression ')'  ('{'b1=block {$statements1=$b1.ast;} '}')?  ( 'else' '{' b2=block {$statements2=$b2.ast;} '}')?
+	 { $ast = new If_statement($expression.ast, $statements1, $statements2); }
 	| assignment
 	 { $ast = $assignment.ast; }
 	| ID '(' call_function ')'
@@ -65,7 +65,9 @@ assignment returns[Assigment_statement ast]
 	;
 
 expression returns[Expression ast]
-	: '!' expression
+	: exp1=expression '.' ID
+	 { $ast = new Struct_access($exp1.ast, $ID); }
+	|'!' expression
 	 { $ast = new Unary_expression($expression.ast); }
 	|left=expression operador=('&&' | '||') right=expression
 	 { $ast = new Logical_expression($left.ast, $operador, $right.ast); }
@@ -79,8 +81,6 @@ expression returns[Expression ast]
 	 { $ast = new Parenthesized_expression($expression.ast); }
 	| ID '(' call_function ')'
 	 { $ast = new Expression_call($ID, $call_function.expressions); }
-	| exp1=expression '.' ID
-	 { $ast = new Struct_access($exp1.ast, $ID); }
 	| left=expression '[' right=expression ']'
 	 { $ast = new Array_access($left.ast, $right.ast); }
 	| INT_LITERAL

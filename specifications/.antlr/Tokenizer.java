@@ -1,4 +1,4 @@
-// Generated from c:/Users/nahia/OneDrive/Escritorio/U N I/3 UNI/2do Semestre/DLP/Practica/DLP_language/DLP_language/mlang_nahiaraSanchez/specifications/Tokenizer.g4 by ANTLR 4.13.1
+// Generated from c:/Users/sanch/OneDrive/Desktop/U N I/3 UNI/2do Semestre/Diseño de Lenguajes de Programación/Practica/DLP_language/DLP_language/mlang_nahiaraSanchez/specifications/Tokenizer.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

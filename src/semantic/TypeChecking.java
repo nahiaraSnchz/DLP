@@ -5,6 +5,10 @@
 
 package semantic;
 
+
+
+import java.lang.reflect.Array;
+
 import ast.*;
 import ast.declaration.Function_definition;
 import ast.declaration.Struct_definition;
@@ -34,15 +38,6 @@ import ast.statement.Return_statement;
 import ast.statement.While_statement;
 import ast.statement.Statement;
 import ast.type.*;
-import ast.type.Array_type;
-import ast.type.Void_type;
-import ast.type.Int_type;
-import ast.type.Real_type;
-import ast.type.Char_type;
-import ast.type.Struct_type;
-
-
-
 import main.ErrorManager;
 import visitor.DefaultVisitor;
 
@@ -76,17 +71,21 @@ public class TypeChecking extends DefaultVisitor {
             statement.setFunction(function_definition);
         }
 
-        if (function_definition.getVariable_definitions() != null) {
-            for (Variable_definition params : function_definition.getVariable_definitions()) {
+        if (function_definition.getParams() != null) {
+            for (Variable_definition params : function_definition.getParams()) {
                 params.accept(this, param);
                 // comprobar que el tipo de la variable es un tipo simple
-                //predicate(simpleType(params.getType()), "Parameter type must be a simple type", params);
+                if (!(simpleType(params.getType()) || params.getType() instanceof Void_type)) {
+                    predicate(false, "Parameter type must be a simple type", params);
+                }
             }
         }
 
         if (function_definition.getType() != null) {
             function_definition.getType().accept(this, param);
-            predicate(simpleType(function_definition.getType()), "Function type must be a simple type or void", function_definition);
+            if (!(simpleType(function_definition.getType()) || function_definition.getType() instanceof Void_type)) {
+                predicate(false, "Function type must be a simple type or void", function_definition);
+            }
         }
         
         
@@ -106,11 +105,17 @@ public class TypeChecking extends DefaultVisitor {
 		super.visit(return_statement, param);
 
         if (return_statement.getFunction().getType().getClass() == Void_type.class) {
-            predicate(return_statement.getExpression() != null, "The return value is void", return_statement);
+            predicate(!return_statement.getExpression().isPresent(), "The return value is void", return_statement);
         }
         else {
-            // Comprobar que el tipo de return sea de mismo tipo que la funcion en la que está
+            if (!return_statement.getExpression().isPresent()){
+                predicate(false, "The return value is not present", return_statement);
+            }
+            else {
+                // Comprobar que el tipo de return sea de mismo tipo que la funcion en la que está
             predicate(sameType(return_statement.getExpression().get().getTypeExpression(), return_statement.getFunction().getType()), "Return type must be a simple type", return_statement);
+            }
+            
         }
         
 		return null;
@@ -128,8 +133,14 @@ public class TypeChecking extends DefaultVisitor {
 
         // Comprobar que el tipo de las expresiones sea de tipo simple o void
         for (Expression expression : print_statement.getExpressions()) {
-            predicate(simpleType(expression.getTypeExpression()), "Print type must be a simple type", expression);
-            predicate(!(expression.getTypeExpression() instanceof Void_type), "Print type musn't be void", expression);
+            //if (expression.getTypeExpression() instanceof Array_type) {
+                //predicate(simpleType(((Array_type) expression.getTypeExpression()).getType()), "Print type must be a simple type", expression);
+            //} 
+            //else {
+                predicate(simpleType(expression.getTypeExpression()), "Print type must be a simple type", expression);
+            //}
+            
+            predicate(!(expression.getTypeExpression() instanceof Void_type), "The expression to be printed cannot be of type void.", expression);
         }
 
 		return null;
@@ -140,12 +151,21 @@ public class TypeChecking extends DefaultVisitor {
 	@Override
 	public Object visit(Printsp_statement printsp_statement, Object param) {
 
-		// printsp_statement.getExpressions().forEach(expression -> expression.accept(this, param));
+		// print_statement.getExpressions().forEach(expression -> expression.accept(this, param));
 		super.visit(printsp_statement, param);
 
-		// Comprobar que el tipo de las expresiones sea de tipo simple
+
+
+        // Comprobar que el tipo de las expresiones sea de tipo simple o void
         for (Expression expression : printsp_statement.getExpressions()) {
-            predicate(simpleType(expression.getTypeExpression()), "Print type must be a simple type", expression);
+            //if (expression.getTypeExpression() instanceof Array_type) {
+               // predicate(simpleType(((Array_type) expression.getTypeExpression()).getType()), "Print type must be a simple type", expression);
+            //} 
+            //else {
+                predicate(simpleType(expression.getTypeExpression()), "Print type must be a simple type", expression);
+            //}
+            
+            predicate(!(expression.getTypeExpression() instanceof Void_type), "The expression to be printed cannot be of type void.", expression);
         }
 
 		return null;
@@ -156,12 +176,21 @@ public class TypeChecking extends DefaultVisitor {
 	@Override
 	public Object visit(Println_statement println_statement, Object param) {
 
-		// println_statement.getExpressions().forEach(expression -> expression.accept(this, param));
+		// print_statement.getExpressions().forEach(expression -> expression.accept(this, param));
 		super.visit(println_statement, param);
 
-		// Comprobar que el tipo de las expresiones sea de tipo simple
+
+
+        // Comprobar que el tipo de las expresiones sea de tipo simple o void
         for (Expression expression : println_statement.getExpressions()) {
-            predicate(simpleType(expression.getTypeExpression()), "Print type must be a simple type", expression);
+            //if (expression.getTypeExpression() instanceof Array_type) {
+                //predicate(simpleType(((Array_type) expression.getTypeExpression()).getType()), "Print type must be a simple type", expression);
+            //} 
+            //else {
+                predicate(simpleType(expression.getTypeExpression()), "Print type must be a simple type", expression);
+            //}
+            
+            predicate(!(expression.getTypeExpression() instanceof Void_type), "The expression to be printed cannot be of type void.", expression);
         }
 
 		return null;
@@ -189,12 +218,17 @@ public class TypeChecking extends DefaultVisitor {
 	@Override
 	public Object visit(While_statement while_statement, Object param) {
 
+        for (Statement statement : while_statement.getStatements()) {
+            // guardar la funcion en la que se encuentra
+            statement.setFunction(while_statement.getFunction());
+        }
+
 		// while_statement.getExpression().accept(this, param);
 		// while_statement.getStatements().forEach(statement -> statement.accept(this, param));
 		super.visit(while_statement, param);
 
         if (!(while_statement.getExpression().getTypeExpression() instanceof Int_type)){
-            predicate (false, "Expression type must be int", while_statement);
+            predicate (false, "Condition type must be int", while_statement);
             
         } 
 
@@ -206,13 +240,22 @@ public class TypeChecking extends DefaultVisitor {
 	@Override
 	public Object visit(If_statement if_statement, Object param) {
 
+        for (Statement statement : if_statement.getSt1()) {
+            // guardar la funcion en la que se encuentra
+            statement.setFunction(if_statement.getFunction());
+        }
+        for (Statement statement : if_statement.getSt2()) {
+            // guardar la funcion en la que se encuentra
+            statement.setFunction(if_statement.getFunction());
+        }
+
 		// if_statement.getExpression().accept(this, param);
 		// if_statement.getSt1().forEach(statement -> statement.accept(this, param));
 		// if_statement.getSt2().forEach(statement -> statement.accept(this, param));
 		super.visit(if_statement, param);
 
         if (!(if_statement.getExpression().getTypeExpression() instanceof Int_type)){
-            predicate (false, "Expression type must be int", if_statement);
+            predicate (false, "Condition type must be int", if_statement);
             
         } 
 
@@ -230,11 +273,16 @@ public class TypeChecking extends DefaultVisitor {
 		// assigment_statement.getRight().accept(this, param);
 		super.visit(assigment_statement, param);
 
-        // Comprobar que la expresión de la izquierda sea del mismo tipo que la expresión de la derecha
-        predicate(sameType(assigment_statement.getLeft().getTypeExpression(), assigment_statement.getRight().getTypeExpression()), 
-            "Left expression must have the same type as rigth expression", assigment_statement);
-
-        //predicate(simpleType(assigment_statement.getLeft().getTypeExpression()), "Left expression must be a simple type", assigment_statement);
+        if (simpleType(assigment_statement.getLeft().getTypeExpression()) == false) {
+            predicate(false, "Left expression must be a simple type", assigment_statement);
+        }
+        
+        if (!(assigment_statement.getRight().getTypeExpression() instanceof ErrorType)) {
+            // Comprobar que la expresión de la izquierda sea del mismo tipo que la expresión de la derecha
+            predicate(sameType(assigment_statement.getLeft().getTypeExpression(), assigment_statement.getRight().getTypeExpression()), 
+                "Left expression must have the same type as rigth expression", assigment_statement);
+        }
+        
         
         predicate(assigment_statement.getLeft().isLvalue() == true, "Left expressión must be lvalue", assigment_statement);
 
@@ -250,9 +298,9 @@ public class TypeChecking extends DefaultVisitor {
 		// function_call_statement.getExpressions().forEach(expression -> expression.accept(this, param));
 		super.visit(function_call_statement, param);
 
-        Function_definition function_definition = function_call_statement.getFunction();
+        Function_definition function_definition = function_call_statement.getFunction_definition();
 
-        if (function_call_statement.getExpressions().size() == function_definition.getVariable_definitions().size()) {
+        if (function_call_statement.getExpressions().size() == function_definition.getParams().size() && function_definition.getParams().size() > 0) {
             
             // Comprobar que los tipos de los parámetros son los mismos
             for (int i = 0; i < function_call_statement.getExpressions().size(); i++) {
@@ -264,7 +312,7 @@ public class TypeChecking extends DefaultVisitor {
                 if (!sameType(expression.getTypeExpression(), function_params.getType())){
                     predicate(sameType(expression.getTypeExpression(), function_params.getType()), 
                         "Function call parameter type must be the same as function definition parameter type", expression);
-                    break;
+                    
                 }
                 
             }
@@ -273,7 +321,7 @@ public class TypeChecking extends DefaultVisitor {
         // Comprobar que el número de parámetros es el mismo
         predicate(function_call_statement.getExpressions().size() == function_definition.getParams().size(), 
         "Function call must have the same number of parameters as function definition", function_call_statement);
-
+        
 
 		return null;
 	}
@@ -361,11 +409,13 @@ public class TypeChecking extends DefaultVisitor {
 		super.visit(cast_expression, param);
 
         // Comprobar que el tipo al que se quiere castear y el de la expresion sea un tipo simple
-        predicate(simpleType(cast_expression.getType()) && simpleType(cast_expression.getExpression().getTypeExpression()), "The type must be a simple type", cast_expression);
+        if (simpleType(cast_expression.getType()) == false || simpleType(cast_expression.getExpression().getTypeExpression()) == false) {
+            predicate(false, "The type must be a simple type", cast_expression);
+        }
 
         // Comprobar que el tipo al que se quiere hacer cast sea distinto al tipo de la expresion
-        if (!(sameType(cast_expression.getType() , cast_expression.getExpression().getTypeExpression()))) {
-            predicate(true, "Cast type must be different from expression type", cast_expression);
+        if ((sameType(cast_expression.getType() , cast_expression.getExpression().getTypeExpression()))) {
+            predicate(false, "Cast type must be different from expression type", cast_expression);
         }
 
         cast_expression.setTypeExpression(cast_expression.getType());
@@ -392,8 +442,14 @@ public class TypeChecking extends DefaultVisitor {
             predicate(false, "Expressions must be int or float", comparative_expression);
         }
 
+
         // Poner el tipo a comparative_expression
-        comparative_expression.setTypeExpression(comparative_expression.getLeft().getTypeExpression());
+        if (comparative_expression.getLeft().getTypeExpression() instanceof Int_type || comparative_expression.getLeft().getTypeExpression() instanceof Real_type ) {
+            comparative_expression.setTypeExpression(new Int_type());
+        }
+        else {
+            comparative_expression.setTypeExpression(new ErrorType());
+        }
 
         // Poner lvalue a false
         comparative_expression.setLvalue(false);
@@ -411,16 +467,12 @@ public class TypeChecking extends DefaultVisitor {
 		super.visit(logical_expression, param);
 
         // comprobar que sean enteros
-        if (logical_expression.getLeft().getTypeExpression() instanceof Int_type) {
-            predicate(sameType(logical_expression.getLeft().getTypeExpression(), logical_expression.getRight().getTypeExpression()), 
-                "Expressions must have the same type", logical_expression);
-        }
-        else {
+        if (!(logical_expression.getLeft().getTypeExpression() instanceof Int_type && logical_expression.getRight().getTypeExpression() instanceof Int_type)) {
             predicate(false, "Expressions must be int", logical_expression);
         }
 
         // Poner el tipo a logical_expression
-        logical_expression.setTypeExpression(logical_expression.getLeft().getTypeExpression());
+        logical_expression.setTypeExpression(new Int_type());
 
         // Poner lvalue a false
         logical_expression.setLvalue(false);
@@ -507,13 +559,22 @@ public class TypeChecking extends DefaultVisitor {
             // Comprobar que el nombre de la variable es el mismo que el de la estructura
             Struct_definition struct_definition = struct_type.getStruct_definition();
 
+            boolean found = false;
+
             for (Variable_definition variable_definition : struct_definition.getVariable_definitions()) {
+                if (variable_definition.getType() instanceof Struct_type) {
+                    visit(variable_definition, null);
+                }
                 if (variable_definition.getName().equals(struct_access.getName())) {
                     struct_access.setTypeExpression(variable_definition.getType());
+                    found = true;
+                    break;
                 }
-                else {
-                    predicate(false, "Struct access variable not found", struct_access);
-                }
+                
+            }
+
+            if (!found) {
+                predicate(false, "The variable " + struct_access.getName() + " does not exist in the struct " + struct_definition.getName(), struct_access);
             }
         }
         
@@ -537,18 +598,23 @@ public class TypeChecking extends DefaultVisitor {
 		super.visit(array_access, param);
 
         // Comprobar que el tipo de la expresion de la izquierda es un Array_type
-        predicate(array_access.getLeft().getTypeExpression() instanceof Array_type, "The expression type must be an Array_type", array_access);
+        if (!(array_access.getLeft().getTypeExpression() instanceof Array_type)) {
+           predicate(false, "The expression type must be an Array_type", array_access);
+           array_access.setTypeExpression(new ErrorType());
+           return null;
+        }
 
         // comprobar que el indice es entero
         if (array_access.getLeft().getTypeExpression() instanceof Array_type) {
-            predicate(array_access.getRight().getTypeExpression() instanceof Int_type, "The expression2 type must be a Int_type", array_access);
+            predicate((array_access.getRight().getTypeExpression() instanceof Int_type), "The expression2 type must be a Int_type", array_access);
             array_access.setTypeExpression(array_access.getLeft().getTypeExpression());
         }
 
         // Poner lvalue a true
         array_access.setLvalue(true);
-        array_access.setTypeExpression(array_access.getLeft().getTypeExpression());
+        array_access.setTypeExpression(((Array_type)array_access.getLeft().getTypeExpression()).getType());
 
+        
 		return null;
 	}
 
@@ -626,7 +692,8 @@ public class TypeChecking extends DefaultVisitor {
      * Devuelve si la expresion es de tipo entero, real o char
      */
     private boolean simpleType (Type t) {
-        return (t instanceof Int_type) || (t instanceof Real_type) || (t instanceof Char_type) || (t instanceof Void_type);
+        
+        return (t instanceof Int_type) || (t instanceof Real_type) || (t instanceof Char_type) || (t instanceof IntE_literal) || (t instanceof CharE_literal) || (t instanceof IntE_real);
     }
 
     private void notifyError(String errorMessage, Position position) {
