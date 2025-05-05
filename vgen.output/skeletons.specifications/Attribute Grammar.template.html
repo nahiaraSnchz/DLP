@@ -122,13 +122,13 @@
         </tr>
 
         <tr>
-            <td><span class="symbol-name">Struct_definition</span><span class="parents">:declaration</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span> <span class="att-type">local_variable*</span></td>
+            <td><span class="symbol-name">Struct_definition</span><span class="parents">:declaration</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span> <span class="att-type">Variable_definition*</span></td>
             <td></td>
             <td></td>
         </tr>
 
         <tr>
-            <td><span class="symbol-name">Function_definition</span><span class="parents">:declaration</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span> <span class="att-type">local_variable*</span> <span class="att-type">type?</span> <span class="att-type">Variable_definition*</span> <span class="att-type">statement*</span></td>
+            <td><span class="symbol-name">Function_definition</span><span class="parents">:declaration</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span> <span class="att-name">params</span>:<span class="att-type">Variable_definition*</span> <span class="att-type">type</span> <span class="att-type">Variable_definition*</span> <span class="att-type">statement*</span></td>
             <td></td>
             <td></td>
         </tr>
@@ -188,6 +188,12 @@
         </tr>
 
         <tr>
+            <td><span class="symbol-name">Unary_expression</span><span class="parents">:expression</span> &rarr; <span class="att-type">expression</span></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tr>
             <td><span class="symbol-name">Arythmetic_expression</span><span class="parents">:expression</span> &rarr; <span class="att-name">left</span>:<span class="att-type">expression</span> <span class="att-name">operador</span>:<span class="att-type">string</span> <span class="att-name">right</span>:<span class="att-type">expression</span></td>
             <td></td>
             <td></td>
@@ -224,7 +230,7 @@
         </tr>
 
         <tr>
-            <td><span class="symbol-name">Variable_access</span><span class="parents">:expression</span> &rarr; <span class="att-type">expression</span> <span class="att-name">name</span>:<span class="att-type">string</span></td>
+            <td><span class="symbol-name">Struct_access</span><span class="parents">:expression</span> &rarr; <span class="att-type">expression</span> <span class="att-name">name</span>:<span class="att-type">string</span></td>
             <td></td>
             <td></td>
         </tr>
@@ -254,13 +260,7 @@
         </tr>
 
         <tr>
-            <td><span class="symbol-name">IdE</span><span class="parents">:expression</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span></td>
-            <td></td>
-            <td></td>
-        </tr>
-
-        <tr>
-            <td><span class="symbol-name">local_variable</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span> <span class="att-type">type</span></td>
+            <td><span class="symbol-name">Variable</span><span class="parents">:expression</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span></td>
             <td></td>
             <td></td>
         </tr>
@@ -284,7 +284,7 @@
         </tr>
 
         <tr>
-            <td><span class="symbol-name">Id_type</span><span class="parents">:type</span> &rarr; &epsilon;</td>
+            <td><span class="symbol-name">Struct_type</span><span class="parents">:type</span> &rarr; <span class="att-name">name</span>:<span class="att-type">string</span></td>
             <td></td>
             <td></td>
         </tr>
@@ -296,7 +296,7 @@
         </tr>
 
         <tr>
-            <td><span class="symbol-name">Return_list</span><span class="parents">:expression</span> &rarr; <span class="att-name">left</span>:<span class="att-type">expression</span> <span class="att-name">right</span>:<span class="att-type">expression</span></td>
+            <td><span class="symbol-name">Void_type</span><span class="parents">:type</span> &rarr; &epsilon;</td>
             <td></td>
             <td></td>
         </tr>

@@ -2,6 +2,7 @@
 
 package ast.expression;
 
+import ast.type.*;
 import org.antlr.v4.runtime.Token;
 import visitor.Visitor;
 
@@ -11,10 +12,13 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	Comparative_expression: expression -> left:expression operador:string right:expression
 	expression -> 
+	
+	PHASE TypeChecking
+	expression -> typeExpression:type
+	expression -> lvalue:boolean
 */
 public class Comparative_expression extends AbstractExpression  {
 
@@ -130,5 +134,4 @@ public class Comparative_expression extends AbstractExpression  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }

@@ -3,6 +3,7 @@
 package ast.statement;
 
 import ast.expression.*;
+import ast.declaration.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -14,10 +15,12 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	Println_statement: statement -> expressions:expression*
 	statement -> 
+	
+	PHASE TypeChecking
+	statement -> function:Function_definition
 */
 public class Println_statement extends AbstractStatement  {
 
@@ -88,5 +91,4 @@ public class Println_statement extends AbstractStatement  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }

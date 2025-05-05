@@ -11,7 +11,6 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	Array_type: type -> name:string type:type
 	type -> 
@@ -106,6 +105,10 @@ public class Array_type extends AbstractType  {
 
         // Methods/attributes in this section will be preserved. Delete if not needed
 
-    // %% --------------------------------------
+		@Override
+		public int getSize() {
+			return Integer.parseInt(name) * getType().getSize();
+		}
 
+    // %% --------------------------------------
 }

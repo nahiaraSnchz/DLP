@@ -2,6 +2,8 @@
 
 package ast.expression;
 
+import ast.type.*;
+import ast.declaration.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -14,10 +16,16 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	Expression_call: expression -> name:string expressions:expression*
 	expression -> 
+	
+	PHASE Identification
+	Expression_call -> function_definition:Function_definition
+	
+	PHASE TypeChecking
+	expression -> typeExpression:type
+	expression -> lvalue:boolean
 */
 public class Expression_call extends AbstractExpression  {
 
@@ -27,6 +35,9 @@ public class Expression_call extends AbstractExpression  {
 	// Expression_call: expression -> string expression*
 	private String name;
 	private List<Expression> expressions;
+
+    // PHASE Identification
+	private Function_definition function_definition;
 
     // ----------------------------------
     // Constructors
@@ -92,6 +103,24 @@ public class Expression_call extends AbstractExpression  {
     }
 
 
+
+    // --------------------------------
+    // PHASE Identification
+
+	// Attribute 'Function_definition' 
+
+	public void setFunction_definition(Function_definition function_definition) {
+		if (function_definition == null)
+			throw new IllegalArgumentException("Parameter 'function_definition' can't be null. Pass a non-null value or use 'Function_definition?' in the abstract grammar");
+		this.function_definition = function_definition;
+
+	}
+
+    public Function_definition getFunction_definition() {
+        return function_definition;
+    }
+
+
     // ----------------------------------
     // Helper methods
 
@@ -111,5 +140,4 @@ public class Expression_call extends AbstractExpression  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }

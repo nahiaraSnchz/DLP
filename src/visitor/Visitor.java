@@ -42,6 +42,8 @@ public interface Visitor {
 
 	public Object visit(Function_call_statement function_call_statement, Object param);
 
+	public Object visit(Unary_expression unary_expression, Object param);
+
 	public Object visit(Arythmetic_expression arythmetic_expression, Object param);
 
 	public Object visit(Cast_expression cast_expression, Object param);
@@ -54,7 +56,7 @@ public interface Visitor {
 
 	public Object visit(Expression_call expression_call, Object param);
 
-	public Object visit(Variable_access variable_access, Object param);
+	public Object visit(Struct_access struct_access, Object param);
 
 	public Object visit(Array_access array_access, Object param);
 
@@ -64,9 +66,7 @@ public interface Visitor {
 
 	public Object visit(CharE_literal charE_literal, Object param);
 
-	public Object visit(IdE idE, Object param);
-
-	public Object visit(Local_variable local_variable, Object param);
+	public Object visit(Variable variable, Object param);
 
 	public Object visit(Int_type int_type, Object param);
 
@@ -74,11 +74,11 @@ public interface Visitor {
 
 	public Object visit(Char_type char_type, Object param);
 
-	public Object visit(Id_type id_type, Object param);
+	public Object visit(Struct_type struct_type, Object param);
 
 	public Object visit(Array_type array_type, Object param);
 
-	public Object visit(Return_list return_list, Object param);
+	public Object visit(Void_type void_type, Object param);
 
 
 }

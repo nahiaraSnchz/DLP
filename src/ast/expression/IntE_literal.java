@@ -2,6 +2,7 @@
 
 package ast.expression;
 
+import ast.type.*;
 import org.antlr.v4.runtime.Token;
 import visitor.Visitor;
 
@@ -11,10 +12,13 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	IntE_literal: expression -> name:string
 	expression -> 
+	
+	PHASE TypeChecking
+	expression -> typeExpression:type
+	expression -> lvalue:boolean
 */
 public class IntE_literal extends AbstractExpression  {
 
@@ -84,5 +88,4 @@ public class IntE_literal extends AbstractExpression  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }

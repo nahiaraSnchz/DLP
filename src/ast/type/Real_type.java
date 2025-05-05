@@ -10,7 +10,6 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	Real_type: type -> 
 	type -> 
@@ -37,6 +36,10 @@ public class Real_type extends AbstractType  {
 
         // Methods/attributes in this section will be preserved. Delete if not needed
 
-    // %% --------------------------------------
+        @Override
+        public int getSize() {
+            return 4; // Assuming real is 4 bytes
+        }
 
+    // %% --------------------------------------
 }

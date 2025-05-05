@@ -2,6 +2,8 @@
 
 package ast.expression;
 
+import ast.type.*;
+import org.antlr.v4.runtime.Token;
 import visitor.Visitor;
 
 // %% User Declarations -------------
@@ -10,10 +12,13 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	Array_access: expression -> left:expression right:expression
 	expression -> 
+	
+	PHASE TypeChecking
+	expression -> typeExpression:type
+	expression -> lvalue:boolean
 */
 public class Array_access extends AbstractExpression  {
 
@@ -106,5 +111,4 @@ public class Array_access extends AbstractExpression  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }

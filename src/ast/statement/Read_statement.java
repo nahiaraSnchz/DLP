@@ -3,6 +3,7 @@
 package ast.statement;
 
 import ast.expression.*;
+import ast.declaration.*;
 import visitor.Visitor;
 
 // %% User Declarations -------------
@@ -11,10 +12,12 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	Read_statement: statement -> expression:expression
 	statement -> 
+	
+	PHASE TypeChecking
+	statement -> function:Function_definition
 */
 public class Read_statement extends AbstractStatement  {
 
@@ -84,5 +87,4 @@ public class Read_statement extends AbstractStatement  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }

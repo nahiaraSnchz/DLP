@@ -1,0 +1,2 @@
+#SOURCE "tests expresiones. errors. array access.txt"
+halt

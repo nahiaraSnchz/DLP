@@ -3,6 +3,7 @@
 package ast.statement;
 
 import ast.expression.*;
+import ast.declaration.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -14,10 +15,12 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	If_statement: statement -> expression:expression st1:statement* st2:statement*
 	statement -> 
+	
+	PHASE TypeChecking
+	statement -> function:Function_definition
 */
 public class If_statement extends AbstractStatement  {
 
@@ -135,5 +138,4 @@ public class If_statement extends AbstractStatement  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }

@@ -1,0 +1,9 @@
+#SOURCE "input.txt"
+#GLOBAL a:int
+#GLOBAL b:float
+#GLOBAL v:5*int
+#type p: {
+	x:float
+	y:float
+}
+halt

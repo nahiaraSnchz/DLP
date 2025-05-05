@@ -80,6 +80,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Variable_definition(String name, Type type)
+	// phase MemoryAllocation { int address }
 	@Override
 	public Object visit(Variable_definition variable_definition, Object param) {
 
@@ -89,22 +90,23 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		return null;
 	}
 
-	// class Struct_definition(String name, List<Local_variable> local_variables)
+	// class Struct_definition(String name, List<Variable_definition> variable_definitions)
+	// phase MemoryAllocation { int address }
 	@Override
 	public Object visit(Struct_definition struct_definition, Object param) {
 
-		// struct_definition.getLocal_variables().forEach(local_variable -> local_variable.accept(this, param));
+		// struct_definition.getVariable_definitions().forEach(variable_definition -> variable_definition.accept(this, param));
 		super.visit(struct_definition, param);
 
 		return null;
 	}
 
-	// class Function_definition(String name, List<Local_variable> local_variables, Optional<Type> type, List<Variable_definition> variable_definitions, List<Statement> statements)
+	// class Function_definition(String name, List<Variable_definition> params, Type type, List<Variable_definition> variable_definitions, List<Statement> statements)
 	@Override
 	public Object visit(Function_definition function_definition, Object param) {
 
-		// function_definition.getLocal_variables().forEach(local_variable -> local_variable.accept(this, param));
-		// function_definition.getType().ifPresent(type -> type.accept(this, param));
+		// function_definition.getParams().forEach(variable_definition -> variable_definition.accept(this, param));
+		// function_definition.getType().accept(this, param);
 		// function_definition.getVariable_definitions().forEach(variable_definition -> variable_definition.accept(this, param));
 		// function_definition.getStatements().forEach(statement -> statement.accept(this, param));
 		super.visit(function_definition, param);
@@ -113,6 +115,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Return_statement(Optional<Expression> expression)
+	// phase TypeChecking { Function_definition function }
 	@Override
 	public Object visit(Return_statement return_statement, Object param) {
 
@@ -123,6 +126,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Print_statement(List<Expression> expressions)
+	// phase TypeChecking { Function_definition function }
 	@Override
 	public Object visit(Print_statement print_statement, Object param) {
 
@@ -133,6 +137,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Printsp_statement(List<Expression> expressions)
+	// phase TypeChecking { Function_definition function }
 	@Override
 	public Object visit(Printsp_statement printsp_statement, Object param) {
 
@@ -143,6 +148,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Println_statement(List<Expression> expressions)
+	// phase TypeChecking { Function_definition function }
 	@Override
 	public Object visit(Println_statement println_statement, Object param) {
 
@@ -153,6 +159,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Read_statement(Expression expression)
+	// phase TypeChecking { Function_definition function }
 	@Override
 	public Object visit(Read_statement read_statement, Object param) {
 
@@ -163,6 +170,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class While_statement(Expression expression, List<Statement> statements)
+	// phase TypeChecking { Function_definition function }
 	@Override
 	public Object visit(While_statement while_statement, Object param) {
 
@@ -174,6 +182,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class If_statement(Expression expression, List<Statement> st1, List<Statement> st2)
+	// phase TypeChecking { Function_definition function }
 	@Override
 	public Object visit(If_statement if_statement, Object param) {
 
@@ -186,6 +195,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Assigment_statement(Expression left, Expression right)
+	// phase TypeChecking { Function_definition function }
 	@Override
 	public Object visit(Assigment_statement assigment_statement, Object param) {
 
@@ -197,6 +207,8 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Function_call_statement(String name, List<Expression> expressions)
+	// phase Identification { Function_definition function_definition }
+	// phase TypeChecking { Function_definition function }
 	@Override
 	public Object visit(Function_call_statement function_call_statement, Object param) {
 
@@ -206,7 +218,19 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		return null;
 	}
 
+	// class Unary_expression(Expression expression)
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
+	@Override
+	public Object visit(Unary_expression unary_expression, Object param) {
+
+		// unary_expression.getExpression().accept(this, param);
+		super.visit(unary_expression, param);
+
+		return null;
+	}
+
 	// class Arythmetic_expression(Expression left, String operador, Expression right)
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Arythmetic_expression arythmetic_expression, Object param) {
 
@@ -218,6 +242,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Cast_expression(Type type, Expression expression)
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Cast_expression cast_expression, Object param) {
 
@@ -229,6 +254,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Comparative_expression(Expression left, String operador, Expression right)
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Comparative_expression comparative_expression, Object param) {
 
@@ -240,6 +266,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Logical_expression(Expression left, String operador, Expression right)
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Logical_expression logical_expression, Object param) {
 
@@ -251,6 +278,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Parenthesized_expression(Expression expression)
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Parenthesized_expression parenthesized_expression, Object param) {
 
@@ -261,6 +289,8 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class Expression_call(String name, List<Expression> expressions)
+	// phase Identification { Function_definition function_definition }
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Expression_call expression_call, Object param) {
 
@@ -270,17 +300,19 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		return null;
 	}
 
-	// class Variable_access(Expression expression, String name)
+	// class Struct_access(Expression expression, String name)
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
-	public Object visit(Variable_access variable_access, Object param) {
+	public Object visit(Struct_access struct_access, Object param) {
 
-		// variable_access.getExpression().accept(this, param);
-		super.visit(variable_access, param);
+		// struct_access.getExpression().accept(this, param);
+		super.visit(struct_access, param);
 
 		return null;
 	}
 
 	// class Array_access(Expression left, Expression right)
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Array_access array_access, Object param) {
 
@@ -292,6 +324,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class IntE_literal(String name)
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(IntE_literal intE_literal, Object param) {
 
@@ -299,6 +332,7 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class IntE_real(String name)
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(IntE_real intE_real, Object param) {
 
@@ -306,25 +340,18 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 	}
 
 	// class CharE_literal(String name)
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(CharE_literal charE_literal, Object param) {
 
 		return null;
 	}
 
-	// class IdE(String name)
+	// class Variable(String name)
+	// phase Identification { Variable_definition variable_definition }
+	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
-	public Object visit(IdE idE, Object param) {
-
-		return null;
-	}
-
-	// class Local_variable(String name, Type type)
-	@Override
-	public Object visit(Local_variable local_variable, Object param) {
-
-		// local_variable.getType().accept(this, param);
-		super.visit(local_variable, param);
+	public Object visit(Variable variable, Object param) {
 
 		return null;
 	}
@@ -350,9 +377,10 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		return null;
 	}
 
-	// class Id_type()
+	// class Struct_type(String name)
+	// phase Identification { Struct_definition struct_definition }
 	@Override
-	public Object visit(Id_type id_type, Object param) {
+	public Object visit(Struct_type struct_type, Object param) {
 
 		return null;
 	}
@@ -367,13 +395,9 @@ public class SkeletonForNewVisitors extends DefaultVisitor {
 		return null;
 	}
 
-	// class Return_list(Expression left, Expression right)
+	// class Void_type()
 	@Override
-	public Object visit(Return_list return_list, Object param) {
-
-		// return_list.getLeft().accept(this, param);
-		// return_list.getRight().accept(this, param);
-		super.visit(return_list, param);
+	public Object visit(Void_type void_type, Object param) {
 
 		return null;
 	}

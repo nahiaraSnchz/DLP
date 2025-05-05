@@ -56,8 +56,7 @@ block returns[List<Statement> ast = new ArrayList<Statement>()]
 	;
 
 call_function returns[List<Expression> expressions = new ArrayList<>()]
-	: (e1=expression {$expressions.add($e1.ast);} (',' e2=expression  {$expressions.add($e2.ast);} )* )? 
-		
+	: (e1=expression {$expressions.add($e1.ast);} (',' e2=expression  {$expressions.add($e2.ast);} )* )? 	
 	;
 
 assignment returns[Assigment_statement ast]
@@ -66,20 +65,22 @@ assignment returns[Assigment_statement ast]
 	;
 
 expression returns[Expression ast]
-	: left=expression operador=('+' | '-' | '*' | '/' | '%') right=expression
+	: '!' expression
+	 { $ast = new Unary_expression($expression.ast); }
+	|left=expression operador=('&&' | '||') right=expression
+	 { $ast = new Logical_expression($left.ast, $operador, $right.ast); }
+	| left=expression operador=('+' | '-' | '*' | '/' | '%') right=expression
 	 { $ast = new Arythmetic_expression($left.ast, $operador, $right.ast); }
-	| '<' type '>' expression
-	 { $ast = new Cast_expression($type.ast, $expression.ast); }
+	| '<' simpleType '>' expression
+	 { $ast = new Cast_expression($simpleType.ast, $expression.ast); }
 	| left=expression operador=('<' | '>' | '<=' | '>=' | '==' | '!=') right=expression
 	 { $ast = new Comparative_expression($left.ast, $operador, $right.ast); }
-	| left=expression operador=('&&' | '||' | '!') right=expression
-	 { $ast = new Logical_expression($left.ast, $operador, $right.ast); }
 	| '(' expression ')'
 	 { $ast = new Parenthesized_expression($expression.ast); }
 	| ID '(' call_function ')'
 	 { $ast = new Expression_call($ID, $call_function.expressions); }
 	| exp1=expression '.' ID
-	 { $ast = new Variable_access($exp1.ast, $ID); }
+	 { $ast = new Struct_access($exp1.ast, $ID); }
 	| left=expression '[' right=expression ']'
 	 { $ast = new Array_access($left.ast, $right.ast); }
 	| INT_LITERAL
@@ -89,44 +90,51 @@ expression returns[Expression ast]
 	| CHAR_LITERAL
 	 { $ast = new CharE_literal($CHAR_LITERAL); }
 	| ID
-	 { $ast = new IdE($ID); }
+	 { $ast = new Variable($ID); }
+	
 	;
 
 
 
 variable_definition returns[Variable_definition ast]
-	: 'var' ID ':' type {$ast = new Variable_definition($ID, $type.ast);}
+	: 'var' ID ':' simpleType {$ast = new Variable_definition($ID, $simpleType.ast);}
+	| ID ':' simpleType {$ast = new Variable_definition($ID, $simpleType.ast);}
 	;
 
-struct_definition returns[Struct_definition ast] locals [List<Local_variable> variables = new ArrayList<>()]
-	: 'struct' ID '{' (local_variable {$variables.add($local_variable.ast);})* '}' 
+
+
+struct_definition returns[Struct_definition ast] locals [List<Variable_definition> variables = new ArrayList<>()]
+	: 'struct' ID '{' (variable_definition {$variables.add($variable_definition.ast);})* '}' 
 	
 	{$ast = new Struct_definition($ID, $variables);}
 	;
 
-function_definition returns[Function_definition ast] locals [List<Local_variable> variables = new ArrayList<>(), List<Variable_definition> variable_definitions = new ArrayList<>(), List<Statement> statements = new ArrayList<>()]
-	: ID '(' (l1=local_variable {$variables.add($l1.ast);} (',' l2=local_variable {$variables.add($l2.ast);})*)* ')' '{' (variable_definition {$variable_definitions.add($variable_definition.ast);})* (s1=statement {$statements.add($s1.ast);})* '}' 
+function_definition returns[Function_definition ast] locals [List<Variable_definition> params_definitions = new ArrayList<>(),List<Variable_definition> variable_definitions = new ArrayList<>(), List<Statement> statements = new ArrayList<>()]
+	: ID '(' (l1=variable_definition {$params_definitions.add($l1.ast);} (',' l2=variable_definition {$params_definitions.add($l2.ast);})*)* ')' '{' (variable_definition {$variable_definitions.add($variable_definition.ast);})* (s1=statement {$statements.add($s1.ast);})* '}' 
 	
-	 { $ast = new Function_definition($ID, $variables, null, $variable_definitions, $statements);}
+	 { $ast = new Function_definition($ID, $params_definitions, new Void_type(), $variable_definitions, $statements);}
 
-	|  ID '('  (l1=local_variable {$variables.add($l1.ast);} (',' l2=local_variable {$variables.add($l2.ast);})*)* ')' (':' t=type ) '{'  (variable_definition {$variable_definitions.add($variable_definition.ast);})* (s2=statement {$statements.add($s2.ast);})* '}' 
-	 { $ast = new Function_definition($ID, $variables, $t.ast, $variable_definitions, $statements);}
+	|  ID '('  (l1=variable_definition {$params_definitions.add($l1.ast);} (',' l2=variable_definition {$params_definitions.add($l2.ast);})*)* ')' (':' t=type ) '{'  (variable_definition {$variable_definitions.add($variable_definition.ast);})* (s2=statement {$statements.add($s2.ast);})* '}' 
+	 { $ast = new Function_definition($ID, $params_definitions, $t.ast, $variable_definitions, $statements);}
 	;
 
 
 
-local_variable returns[Local_variable ast]
-	: ID ':' type {$ast = new Local_variable($ID, $type.ast);}
-	;
 
 
-type returns[Type ast]
+
+simpleType returns[Type ast]
  	: 'int' { $ast = new Int_type(); }
     | 'float' { $ast = new Real_type(); }
     | 'char' { $ast = new Char_type(); }
-    | ID { $ast = new Id_type(); }
-	| '[' INT_LITERAL ']' type { $ast = new Array_type($INT_LITERAL, $type.ast); }
+    | ID { $ast = new Struct_type($ID); }
+	| '[' INT_LITERAL ']' simpleType { $ast = new Array_type($INT_LITERAL, $simpleType.ast); }
  ;
+
+ type returns [Type ast]
+	: 'void' { $ast = new Void_type(); }
+	| simpleType {$ast = $simpleType.ast;}
+	;
 
 
 

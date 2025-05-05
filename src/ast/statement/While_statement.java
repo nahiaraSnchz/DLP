@@ -3,6 +3,7 @@
 package ast.statement;
 
 import ast.expression.*;
+import ast.declaration.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -14,10 +15,12 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	While_statement: statement -> expression:expression statements:statement*
 	statement -> 
+	
+	PHASE TypeChecking
+	statement -> function:Function_definition
 */
 public class While_statement extends AbstractStatement  {
 
@@ -111,5 +114,4 @@ public class While_statement extends AbstractStatement  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }

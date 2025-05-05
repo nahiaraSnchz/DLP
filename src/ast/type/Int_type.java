@@ -10,7 +10,6 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	Int_type: type -> 
 	type -> 
@@ -37,6 +36,10 @@ public class Int_type extends AbstractType  {
 
         // Methods/attributes in this section will be preserved. Delete if not needed
 
-    // %% --------------------------------------
+        @Override
+        public int getSize() {
+            return 2; // Assuming int is 4 bytes
+        }
 
+    // %% --------------------------------------
 }

@@ -10,7 +10,6 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	Char_type: type -> 
 	type -> 
@@ -37,6 +36,10 @@ public class Char_type extends AbstractType  {
 
         // Methods/attributes in this section will be preserved. Delete if not needed
 
-    // %% --------------------------------------
+        @Override
+        public int getSize() {
+            return 1; // Assuming char is 1 byte
+        }
 
+    // %% --------------------------------------
 }

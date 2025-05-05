@@ -42,15 +42,15 @@ public class DefaultVisitor implements Visitor {
 	@Override
 	public Object visit(Struct_definition struct_definition, Object param) {
 
-		struct_definition.getLocal_variables().forEach(local_variable -> local_variable.accept(this, param));
+		struct_definition.getVariable_definitions().forEach(variable_definition -> variable_definition.accept(this, param));
 		return null;
 	}
 
 	@Override
 	public Object visit(Function_definition function_definition, Object param) {
 
-		function_definition.getLocal_variables().forEach(local_variable -> local_variable.accept(this, param));
-		function_definition.getType().ifPresent(type -> type.accept(this, param));
+		function_definition.getParams().forEach(variable_definition -> variable_definition.accept(this, param));
+		function_definition.getType().accept(this, param);
 		function_definition.getVariable_definitions().forEach(variable_definition -> variable_definition.accept(this, param));
 		function_definition.getStatements().forEach(statement -> statement.accept(this, param));
 		return null;
@@ -124,6 +124,13 @@ public class DefaultVisitor implements Visitor {
 	}
 
 	@Override
+	public Object visit(Unary_expression unary_expression, Object param) {
+
+		unary_expression.getExpression().accept(this, param);
+		return null;
+	}
+
+	@Override
 	public Object visit(Arythmetic_expression arythmetic_expression, Object param) {
 
 		arythmetic_expression.getLeft().accept(this, param);
@@ -170,9 +177,9 @@ public class DefaultVisitor implements Visitor {
 	}
 
 	@Override
-	public Object visit(Variable_access variable_access, Object param) {
+	public Object visit(Struct_access struct_access, Object param) {
 
-		variable_access.getExpression().accept(this, param);
+		struct_access.getExpression().accept(this, param);
 		return null;
 	}
 
@@ -203,15 +210,8 @@ public class DefaultVisitor implements Visitor {
 	}
 
 	@Override
-	public Object visit(IdE idE, Object param) {
+	public Object visit(Variable variable, Object param) {
 
-		return null;
-	}
-
-	@Override
-	public Object visit(Local_variable local_variable, Object param) {
-
-		local_variable.getType().accept(this, param);
 		return null;
 	}
 
@@ -234,7 +234,7 @@ public class DefaultVisitor implements Visitor {
 	}
 
 	@Override
-	public Object visit(Id_type id_type, Object param) {
+	public Object visit(Struct_type struct_type, Object param) {
 
 		return null;
 	}
@@ -247,10 +247,8 @@ public class DefaultVisitor implements Visitor {
 	}
 
 	@Override
-	public Object visit(Return_list return_list, Object param) {
+	public Object visit(Void_type void_type, Object param) {
 
-		return_list.getLeft().accept(this, param);
-		return_list.getRight().accept(this, param);
 		return null;
 	}
 

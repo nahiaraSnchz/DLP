@@ -3,6 +3,7 @@
 package ast.statement;
 
 import ast.expression.*;
+import ast.declaration.*;
 import java.util.Optional;
 import visitor.Visitor;
 
@@ -12,10 +13,12 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	Return_statement: statement -> expression:expression?
 	statement -> 
+	
+	PHASE TypeChecking
+	statement -> function:Function_definition
 */
 public class Return_statement extends AbstractStatement  {
 
@@ -82,5 +85,4 @@ public class Return_statement extends AbstractStatement  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }

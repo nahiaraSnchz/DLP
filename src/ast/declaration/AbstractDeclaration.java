@@ -10,7 +10,6 @@ import ast.*;
 
 // %% -------------------------------
 
-
 /*
 	declaration -> 
 */
@@ -24,5 +23,4 @@ public abstract class AbstractDeclaration extends AbstractAST implements Declara
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }

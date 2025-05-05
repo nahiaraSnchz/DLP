@@ -12,10 +12,12 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
 	Variable_definition: declaration -> name:string type:type
 	declaration -> 
+	
+	PHASE MemoryAllocation
+	Variable_definition -> address:int
 */
 public class Variable_definition extends AbstractDeclaration  {
 
@@ -25,6 +27,9 @@ public class Variable_definition extends AbstractDeclaration  {
 	// Variable_definition: declaration -> string type
 	private String name;
 	private Type type;
+
+    // PHASE MemoryAllocation
+	private int address;
 
     // ----------------------------------
     // Constructors
@@ -89,6 +94,22 @@ public class Variable_definition extends AbstractDeclaration  {
     }
 
 
+
+    // --------------------------------
+    // PHASE MemoryAllocation
+
+	// Attribute 'address:int' 
+
+	public void setAddress(int address) {
+		this.address = address;
+
+	}
+
+    public int getAddress() {
+        return address;
+    }
+
+
     // ----------------------------------
     // Helper methods
 
@@ -108,5 +129,4 @@ public class Variable_definition extends AbstractDeclaration  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }

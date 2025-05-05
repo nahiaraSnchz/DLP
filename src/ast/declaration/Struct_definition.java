@@ -2,7 +2,6 @@
 
 package ast.declaration;
 
-import ast.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -15,51 +14,56 @@ import visitor.Visitor;
 
 // %% -------------------------------
 
-
 /*
-	Struct_definition: declaration -> name:string local_variables:local_variable*
+	Struct_definition: declaration -> name:string variable_definitions:Variable_definition*
 	declaration -> 
+	
+	PHASE MemoryAllocation
+	Struct_definition -> address:int
 */
 public class Struct_definition extends AbstractDeclaration  {
 
     // ----------------------------------
     // Instance Variables
 
-	// Struct_definition: declaration -> string local_variable*
+	// Struct_definition: declaration -> string Variable_definition*
 	private String name;
-	private List<Local_variable> local_variables;
+	private List<Variable_definition> variable_definitions;
+
+    // PHASE MemoryAllocation
+	private int address;
 
     // ----------------------------------
     // Constructors
 
-	public Struct_definition(String name, List<Local_variable> local_variables) {
+	public Struct_definition(String name, List<Variable_definition> variable_definitions) {
 		super();
 
 		if (name == null)
 			throw new IllegalArgumentException("Parameter 'name' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
 		this.name = name;
 
-		if (local_variables == null)
-			local_variables = new ArrayList<>();
-		this.local_variables = local_variables;
+		if (variable_definitions == null)
+			variable_definitions = new ArrayList<>();
+		this.variable_definitions = variable_definitions;
 
-		updatePositions(name, local_variables);
+		updatePositions(name, variable_definitions);
 	}
 
-	public Struct_definition(Object name, Object local_variables) {
+	public Struct_definition(Object name, Object variable_definitions) {
 		super();
 
         if (name == null)
             throw new IllegalArgumentException("Parameter 'name' can't be null. Pass a non-null value or use 'string?' in the abstract grammar");
 		this.name = (name instanceof Token) ? ((Token) name).getText() : (String) name;
 
-        this.local_variables = castList(local_variables, unwrapIfContext.andThen(Local_variable.class::cast));
-		updatePositions(name, local_variables);
+        this.variable_definitions = castList(variable_definitions, unwrapIfContext.andThen(Variable_definition.class::cast));
+		updatePositions(name, variable_definitions);
 	}
 
 
     // ----------------------------------
-    // Struct_definition: declaration -> string local_variable*
+    // Struct_definition: declaration -> string Variable_definition*
 
 	// Child 'string' 
 
@@ -75,21 +79,37 @@ public class Struct_definition extends AbstractDeclaration  {
     }
 
 
-	// Child 'local_variable*' 
+	// Child 'Variable_definition*' 
 
-	public void setLocal_variables(List<Local_variable> local_variables) {
-		if (local_variables == null)
-			local_variables = new ArrayList<>();
-		this.local_variables = local_variables;
+	public void setVariable_definitions(List<Variable_definition> variable_definitions) {
+		if (variable_definitions == null)
+			variable_definitions = new ArrayList<>();
+		this.variable_definitions = variable_definitions;
 
 	}
 
-    public List<Local_variable> getLocal_variables() {
-        return local_variables;
+    public List<Variable_definition> getVariable_definitions() {
+        return variable_definitions;
     }
 
-    public Stream<Local_variable> local_variables() {
-        return local_variables.stream();
+    public Stream<Variable_definition> variable_definitions() {
+        return variable_definitions.stream();
+    }
+
+
+
+    // --------------------------------
+    // PHASE MemoryAllocation
+
+	// Attribute 'address:int' 
+
+	public void setAddress(int address) {
+		this.address = address;
+
+	}
+
+    public int getAddress() {
+        return address;
     }
 
 
@@ -103,7 +123,7 @@ public class Struct_definition extends AbstractDeclaration  {
 
     @Override
     public String toString() {
-        return "Struct_definition{" + " name=" + this.getName() + " local_variables=" + this.getLocal_variables() + "}";
+        return "Struct_definition{" + " name=" + this.getName() + " variable_definitions=" + this.getVariable_definitions() + "}";
     }
 
 
@@ -112,5 +132,4 @@ public class Struct_definition extends AbstractDeclaration  {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
     // %% --------------------------------------
-
 }
