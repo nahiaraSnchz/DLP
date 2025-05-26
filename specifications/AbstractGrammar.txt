@@ -57,7 +57,8 @@ ATTRIBUTE GRAMMAR Identification
 Variable -> Variable_definition;
 Function_call_statement -> Function_definition;     // llamada a una función desde statement
 Expression_call -> Function_definition;             // llamada a una función desde expression
-Struct_type-> Struct_definition;
+Struct_type -> Struct_definition;
+Variable_definition -> global:boolean;
 
 
 // -----------------------
@@ -66,7 +67,7 @@ ATTRIBUTE GRAMMAR TypeChecking
 expression -> typeExpression:type;
 expression -> lvalue:boolean;
 statement -> function:Function_definition;
-variable
+
 
 // -----------------------
 ATTRIBUTE GRAMMAR MemoryAllocation
@@ -81,8 +82,9 @@ CODE SPECIFICATION Mapl
 
 run[program]
 execute[statement]
+execute[declaration]
 value[expression]
 address[expression]
 
 metadata[program]
-metadata[Variable_definition]
+metadata[declaration]

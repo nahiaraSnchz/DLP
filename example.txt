@@ -1,0 +1,13 @@
+struct Persona {
+	sueldo:int;
+	edad:int;
+}
+
+var nahi:Persona;
+
+main() {
+	nahi.sueldo = 1;
+
+	nahi.edad = nahi.sueldo + 20;
+}
+

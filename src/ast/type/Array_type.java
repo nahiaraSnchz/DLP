@@ -110,5 +110,30 @@ public class Array_type extends AbstractType  {
 			return Integer.parseInt(name) * getType().getSize();
 		}
 
+		@Override
+		public String getMaplName(String s) {
+			s += getName();  // añadimos la dimensión actual
+
+			if (getType() instanceof Array_type) {
+				s += "*" + ((Array_type) getType()).getMaplName("");
+			} else {
+				s += "*" + getType().getMaplName("");  // añadimos el tipo base
+			}
+
+			return s;
+		}
+
+		private boolean simpleType(Type type) {
+			if (type instanceof Int_type)
+				return true;
+			if (type instanceof Real_type)
+				return true;
+			if (type instanceof Char_type)
+				return true;
+			return false;
+		}
+
+		
+
     // %% --------------------------------------
 }

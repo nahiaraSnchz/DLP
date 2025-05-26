@@ -41,5 +41,17 @@ public class Real_type extends AbstractType  {
             return 4; // Assuming real is 4 bytes
         }
 
+        @Override
+        public String getMaplName(String s) {
+            return "float";
+        }
+
+        @Override
+        public String getSuffix() {
+            return "f"; // Suffix for float type in MAPL
+        }
+
+        
+
     // %% --------------------------------------
 }

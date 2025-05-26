@@ -30,7 +30,7 @@ public class CodeGeneration {
         allocator.process(ast);
 
         var specification = new MaplCodeSpecification(sourceFile, out);
-        //specification.process(ast);
+        specification.process(ast);
 
     }
 

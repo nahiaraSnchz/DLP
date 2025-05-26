@@ -41,5 +41,16 @@ public class Int_type extends AbstractType  {
             return 2; // Assuming int is 4 bytes
         }
 
+        @Override
+        public String getMaplName(String s) {
+            return "int";
+        }
+
+        @Override
+        public String getSuffix() {
+            return "i"; // Suffix for integer type in MAPL
+        }
+
+
     // %% --------------------------------------
 }

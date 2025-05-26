@@ -105,6 +105,7 @@ public class MemoryAllocation extends DefaultVisitor {
 	}
 
 	// class Variable_definition(String name, Type type)
+	// phase Identification { boolean global }
 	// phase MemoryAllocation { int address }
 	@Override
 	public Object visit(Variable_definition variable_definition, Object param) {

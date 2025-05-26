@@ -16,6 +16,9 @@ import visitor.Visitor;
 	Variable_definition: declaration -> name:string type:type
 	declaration -> 
 	
+	PHASE Identification
+	Variable_definition -> global:boolean
+	
 	PHASE MemoryAllocation
 	Variable_definition -> address:int
 */
@@ -27,6 +30,9 @@ public class Variable_definition extends AbstractDeclaration  {
 	// Variable_definition: declaration -> string type
 	private String name;
 	private Type type;
+
+    // PHASE Identification
+	private boolean global = true;
 
     // PHASE MemoryAllocation
 	private int address;
@@ -91,6 +97,22 @@ public class Variable_definition extends AbstractDeclaration  {
 
     public Type getType() {
         return type;
+    }
+
+
+
+    // --------------------------------
+    // PHASE Identification
+
+	// Attribute 'global:boolean' 
+
+	public void setGlobal(boolean global) {
+		this.global = global;
+
+	}
+
+    public boolean isGlobal() {
+        return global;
     }
 
 

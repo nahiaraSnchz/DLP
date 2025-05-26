@@ -38,7 +38,12 @@ public class Void_type extends AbstractType  {
 
         @Override
         public int getSize() {
-            throw new UnsupportedOperationException("Void type has no size");
+            return 0;
+        }
+
+        @Override
+        public String getMaplName( String s) {
+            return "VOID";
         }
 
     // %% --------------------------------------

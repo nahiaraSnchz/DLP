@@ -27,9 +27,6 @@ WHITESPACE
 	: [ \t\r\n]+ -> skip
 	;
 
-SEMICOLON
-	: ';' -> skip
-	;
 
 
 

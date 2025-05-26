@@ -23,6 +23,8 @@ public interface Type extends AST {
         // Methods/attributes in this section will be preserved. Delete if not needed
 
         public int getSize();
+        public String getMaplName(String s);
+        public String getSuffix();
 
     // %% --------------------------------------
 }

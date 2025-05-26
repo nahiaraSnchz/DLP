@@ -133,5 +133,22 @@ public class Arythmetic_expression extends AbstractExpression  {
 
         // Methods/attributes in this section will be preserved. Delete if not needed
 
+		public String getMaplOperador() {
+			switch (operador) {
+				case "+":
+					return "add" + getLeft().getTypeExpression().getSuffix();
+				case "-":
+					return "sub" + getLeft().getTypeExpression().getSuffix();
+				case "*":
+					return "mul" + getLeft().getTypeExpression().getSuffix();
+				case "/":
+					return "div" + getLeft().getTypeExpression().getSuffix();
+				case "%":
+					return "mod" + getLeft().getTypeExpression().getSuffix();
+				default:
+					throw new IllegalArgumentException("Unknown operator: " + operador);
+			}
+		}
+
     // %% --------------------------------------
 }

@@ -49,4 +49,15 @@ public class ErrorType implements Type  {
     public void updatePositions(Position newStart, Position newEnd){
 
     }
+
+    @Override
+    public String getMaplName(String s) {
+        throw new UnsupportedOperationException("ErrorType cannot be converted to string");
+    }
+
+    @Override
+    public String getSuffix() {
+        throw new UnsupportedOperationException("ErrorType cannot have a suffix");
+    }
+
 }

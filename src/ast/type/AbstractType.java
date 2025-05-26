@@ -22,5 +22,13 @@ public abstract class AbstractType extends AbstractAST implements Type {
 
         // Methods/attributes in this section will be preserved. Delete if not needed
 
+        @Override
+        public String getSuffix() {
+            // Default implementation, can be overridden by subclasses
+            return "";
+        }
+
+        
+
     // %% --------------------------------------
 }

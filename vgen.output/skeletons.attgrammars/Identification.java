@@ -87,12 +87,15 @@ public class Identification extends DefaultVisitor {
 	}
 
 	// class Variable_definition(String name, Type type)
+	// phase Identification { boolean global }
 	@Override
 	public Object visit(Variable_definition variable_definition, Object param) {
 
 		// variable_definition.getType().accept(this, param);
 		super.visit(variable_definition, param);
 
+		// TODO: Remember to initialize SYNTHESIZED attributes <-----
+		// variable_definition.setGlobal(?);
 		return null;
 	}
 

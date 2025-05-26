@@ -28,7 +28,7 @@ import codegeneration.*;
  */
 
 public class Main {
-    public static final String TEST_FILE = "src\\Tests\\4. Todo junto.txt"; // Used only in development
+    public static final String TEST_FILE = "test_generacion_codigo_final.txt"; // Used only in development
     public static final String OUTPUT_FILE = "output.txt";
 
     public static void main(String[] args) throws Exception {

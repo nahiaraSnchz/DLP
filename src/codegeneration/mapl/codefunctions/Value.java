@@ -3,6 +3,7 @@
 package codegeneration.mapl.codefunctions;
 
 import ast.expression.*;
+import ast.type.Array_type;
 import codegeneration.mapl.*;
 
 
@@ -18,10 +19,8 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(Unary_expression unary_expression, Object param) {
 
-		// value(unary_expression.getExpression());
-		// address(unary_expression.getExpression());
-
-		out("<instruction>");
+		value(unary_expression.getExpression());
+		out("not");
 
 		return null;
 	}
@@ -31,13 +30,11 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(Arythmetic_expression arythmetic_expression, Object param) {
 
-		// value(arythmetic_expression.getLeft());
-		// address(arythmetic_expression.getLeft());
+		value(arythmetic_expression.getLeft());
+		value(arythmetic_expression.getRight());
 
-		// value(arythmetic_expression.getRight());
-		// address(arythmetic_expression.getRight());
-
-		out("<instruction>");
+		String operator = arythmetic_expression.getMaplOperador();
+		out(operator);
 
 		return null;
 	}
@@ -47,10 +44,8 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(Cast_expression cast_expression, Object param) {
 
-		// value(cast_expression.getExpression());
-		// address(cast_expression.getExpression());
-
-		out("<instruction>");
+		value(cast_expression.getExpression());
+		out(cast_expression.getExpression().getTypeExpression().getSuffix() + "2" + cast_expression.getType().getSuffix());
 
 		return null;
 	}
@@ -60,13 +55,12 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(Comparative_expression comparative_expression, Object param) {
 
-		// value(comparative_expression.getLeft());
-		// address(comparative_expression.getLeft());
+		value(comparative_expression.getLeft());
+		value(comparative_expression.getRight());
 
-		// value(comparative_expression.getRight());
-		// address(comparative_expression.getRight());
+		String operator = comparative_expression.getMaplOperador();
 
-		out("<instruction>");
+		out(operator);
 
 		return null;
 	}
@@ -76,13 +70,12 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(Logical_expression logical_expression, Object param) {
 
-		// value(logical_expression.getLeft());
-		// address(logical_expression.getLeft());
+		value(logical_expression.getLeft());
+		value(logical_expression.getRight());
 
-		// value(logical_expression.getRight());
-		// address(logical_expression.getRight());
+		String operator = logical_expression.getMaplOperador();
 
-		out("<instruction>");
+		out(operator);
 
 		return null;
 	}
@@ -91,12 +84,7 @@ public class Value extends AbstractCodeFunction {
 	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Parenthesized_expression parenthesized_expression, Object param) {
-
-		// value(parenthesized_expression.getExpression());
-		// address(parenthesized_expression.getExpression());
-
-		out("<instruction>");
-
+		value(parenthesized_expression.getExpression());
 		return null;
 	}
 
@@ -106,10 +94,11 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(Expression_call expression_call, Object param) {
 
-		// value(expression_call.expressions());
-		// address(expression_call.expressions());
+		expression_call.getExpressions().forEach(expression -> {
+			value(expression);
+		});
 
-		out("<instruction>");
+		out("call " + expression_call.getName());
 
 		return null;
 	}
@@ -119,10 +108,8 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(Struct_access struct_access, Object param) {
 
-		// value(struct_access.getExpression());
-		// address(struct_access.getExpression());
-
-		out("<instruction>");
+		address(struct_access);
+		out("load" + struct_access.getTypeExpression().getSuffix());
 
 		return null;
 	}
@@ -132,13 +119,8 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(Array_access array_access, Object param) {
 
-		// value(array_access.getLeft());
-		// address(array_access.getLeft());
-
-		// value(array_access.getRight());
-		// address(array_access.getRight());
-
-		out("<instruction>");
+		address(array_access);
+		out("load" + array_access.getTypeExpression().getSuffix());
 
 		return null;
 	}
@@ -148,7 +130,7 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(IntE_literal intE_literal, Object param) {
 
-		out("<instruction>");
+		out("pushi " + intE_literal.getName());
 
 		return null;
 	}
@@ -158,7 +140,7 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(IntE_real intE_real, Object param) {
 
-		out("<instruction>");
+		out("pushf " + intE_real.getName());
 
 		return null;
 	}
@@ -168,7 +150,7 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(CharE_literal charE_literal, Object param) {
 
-		out("<instruction>");
+		out("pushb " + charE_literal.getName());
 
 		return null;
 	}
@@ -179,7 +161,15 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(Variable variable, Object param) {
 
-		out("<instruction>");
+		
+
+		if (variable.isLvalue()) {
+			out("pusha " +  variable.getVariable_definition().getAddress());
+			out("load" + variable.getTypeExpression().getSuffix());
+		}
+		else {
+			out("push" + variable.getTypeExpression().getSuffix() + " " + variable.getName());
+		}
 
 		return null;
 	}

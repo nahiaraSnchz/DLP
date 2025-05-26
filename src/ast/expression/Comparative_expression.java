@@ -133,5 +133,25 @@ public class Comparative_expression extends AbstractExpression  {
 
         // Methods/attributes in this section will be preserved. Delete if not needed
 
+
+		public String getMaplOperador() {
+			switch (getOperador()) {
+				case "==":
+					return "eq" + getLeft().getTypeExpression().getSuffix();
+				case "!=":
+					return "ne" + getLeft().getTypeExpression().getSuffix();
+				case "<":
+					return "lt" + getLeft().getTypeExpression().getSuffix();
+				case "<=":
+					return "le" + getLeft().getTypeExpression().getSuffix();
+				case ">":
+					return "gt" + getLeft().getTypeExpression().getSuffix();
+				case ">=":
+					return "ge" + getLeft().getTypeExpression().getSuffix();
+				default:
+					throw new IllegalArgumentException("Unknown operator: " + getOperador());
+			}
+		}
+
     // %% --------------------------------------
 }

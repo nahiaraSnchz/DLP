@@ -133,5 +133,16 @@ public class Logical_expression extends AbstractExpression  {
 
         // Methods/attributes in this section will be preserved. Delete if not needed
 
+		public String getMaplOperador() {
+			switch (operador) {
+				case "&&":
+					return "and";
+				case "||":
+					return "or";
+				default:
+					throw new IllegalArgumentException("Unknown logical operator: " + operador);
+			}
+		}
+
     // %% --------------------------------------
 }

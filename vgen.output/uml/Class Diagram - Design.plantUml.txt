@@ -49,6 +49,8 @@ Program o-[#404040,thickness=2]- "✱" Declaration : declarations >
 
 class Variable_definition {
 	+String name
+	..<color:#ff6600> Identification </color>..
+	+<color:#ff6600>boolean global</color>
 	..<color:#669900> MemoryAllocation </color>..
 	+<color:#669900>int address</color>
 }

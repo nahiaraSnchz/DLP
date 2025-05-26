@@ -3,7 +3,6 @@
 package codegeneration.mapl.codefunctions;
 
 import ast.*;
-import ast.declaration.Variable_definition;
 import codegeneration.mapl.*;
 
 
@@ -19,13 +18,13 @@ public class Run extends AbstractCodeFunction {
 	public Object visit(Program program, Object param) {
 
 		metadata(program);
+		out("call main");
+		out("halt");
 		for (var declaration : program.getDeclarations()) {
-			if (!(declaration instanceof Variable_definition)) {
-				//execute(declaration);
-			}
+			execute(declaration);
+			out("");
 		}
         
-        out("halt");
 
         return null;
 	}

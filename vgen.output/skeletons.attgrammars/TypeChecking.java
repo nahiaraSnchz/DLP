@@ -87,6 +87,7 @@ public class TypeChecking extends DefaultVisitor {
 	}
 
 	// class Variable_definition(String name, Type type)
+	// phase Identification { boolean global }
 	@Override
 	public Object visit(Variable_definition variable_definition, Object param) {
 

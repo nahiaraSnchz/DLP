@@ -41,5 +41,15 @@ public class Char_type extends AbstractType  {
             return 1; // Assuming char is 1 byte
         }
 
+        @Override
+        public String getMaplName(String s) {
+            return "char";
+        }
+
+        @Override
+        public String getSuffix() {
+            return "b"; // Suffix for character type in MAPL
+        }
+
     // %% --------------------------------------
 }

@@ -118,5 +118,20 @@ public class Struct_type extends AbstractType  {
             return size; // Default size if no variable definitions are found
         }
 
+        @Override
+        public String getMaplName(String s) {
+            s += getStruct_definition().getName();
+            return s;
+        }
+
+        public Variable_definition getField (String name) {
+            for (Variable_definition var : struct_definition.getVariable_definitions()) {
+                if (var.getName().equals(name)) {
+                    return var;
+                }
+            }
+            return null; // Return null if no field with the given name is found
+        }
+
     // %% --------------------------------------
 }

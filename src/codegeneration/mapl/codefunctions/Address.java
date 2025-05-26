@@ -2,8 +2,11 @@
 
 package codegeneration.mapl.codefunctions;
 
+import org.stringtemplate.v4.compiler.STParser.singleElement_return;
+
 import ast.expression.*;
 import codegeneration.mapl.*;
+import ast.type.*;
 
 
 public class Address extends AbstractCodeFunction {
@@ -18,11 +21,6 @@ public class Address extends AbstractCodeFunction {
 	@Override
 	public Object visit(Unary_expression unary_expression, Object param) {
 
-		// value(unary_expression.getExpression());
-		// address(unary_expression.getExpression());
-
-		out("<instruction>");
-
 		return null;
 	}
 
@@ -30,14 +28,6 @@ public class Address extends AbstractCodeFunction {
 	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Arythmetic_expression arythmetic_expression, Object param) {
-
-		// value(arythmetic_expression.getLeft());
-		// address(arythmetic_expression.getLeft());
-
-		// value(arythmetic_expression.getRight());
-		// address(arythmetic_expression.getRight());
-
-		out("<instruction>");
 
 		return null;
 	}
@@ -47,11 +37,6 @@ public class Address extends AbstractCodeFunction {
 	@Override
 	public Object visit(Cast_expression cast_expression, Object param) {
 
-		// value(cast_expression.getExpression());
-		// address(cast_expression.getExpression());
-
-		out("<instruction>");
-
 		return null;
 	}
 
@@ -60,14 +45,6 @@ public class Address extends AbstractCodeFunction {
 	@Override
 	public Object visit(Comparative_expression comparative_expression, Object param) {
 
-		// value(comparative_expression.getLeft());
-		// address(comparative_expression.getLeft());
-
-		// value(comparative_expression.getRight());
-		// address(comparative_expression.getRight());
-
-		out("<instruction>");
-
 		return null;
 	}
 
@@ -75,14 +52,6 @@ public class Address extends AbstractCodeFunction {
 	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Logical_expression logical_expression, Object param) {
-
-		// value(logical_expression.getLeft());
-		// address(logical_expression.getLeft());
-
-		// value(logical_expression.getRight());
-		// address(logical_expression.getRight());
-
-		out("<instruction>");
 
 		return null;
 	}
@@ -106,10 +75,6 @@ public class Address extends AbstractCodeFunction {
 	@Override
 	public Object visit(Expression_call expression_call, Object param) {
 
-		// value(expression_call.expressions());
-		// address(expression_call.expressions());
-
-		out("<instruction>");
 
 		return null;
 	}
@@ -118,11 +83,15 @@ public class Address extends AbstractCodeFunction {
 	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Struct_access struct_access, Object param) {
+		// calcula la direccion base de la estructura
+		address(struct_access.getExpression());
+		// Tipo de la expresion base 
+		Struct_type structType = (Struct_type) struct_access.getExpression().getTypeExpression();
+		// Calcula el offset del campo dentro de la estructura
+		int offset = structType.getField(struct_access.getName()).getAddress();
 
-		// value(struct_access.getExpression());
-		// address(struct_access.getExpression());
-
-		out("<instruction>");
+		out("pushi " + offset);
+		out("addi");
 
 		return null;
 	}
@@ -131,14 +100,16 @@ public class Address extends AbstractCodeFunction {
 	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Array_access array_access, Object param) {
+		// direccion base del array
+		address(array_access.getLeft());
+		// Evalua el indice del array
+		value(array_access.getRight());
+		// Tamaño del tipo de datos del array
+		int size = ((Array_type)array_access.getLeft().getTypeExpression()).getType().getSize();
 
-		// value(array_access.getLeft());
-		// address(array_access.getLeft());
-
-		// value(array_access.getRight());
-		// address(array_access.getRight());
-
-		out("<instruction>");
+		out("pushi " + size);
+		out("mul");
+		out("add");
 
 		return null;
 	}
@@ -178,8 +149,14 @@ public class Address extends AbstractCodeFunction {
 	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Variable variable, Object param) {
-
-		out("<instruction>");
+		if (variable.getVariable_definition().isGlobal()) {
+			out("pusha"  + " " + variable.getVariable_definition().getAddress());
+		}
+		else {
+			out("pusha bp");
+			out("pushi " + variable.getVariable_definition().getAddress());
+			out("add");
+		}
 
 		return null;
 	}

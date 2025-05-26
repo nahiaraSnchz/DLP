@@ -127,8 +127,17 @@ public class Identification extends DefaultVisitor {
 
         // Establece un nuevo ámbito para la función específica
         variables.set();
+
+        for (Variable_definition p: function_definition.getParams()) {
+            p.setGlobal(false);
+            p.accept(this, param);
+        }
         
-        function_definition.variable_definitions().forEach(v -> v.accept(this, param));
+        //function_definition.variable_definitions().forEach(v -> v.accept(this, param));
+        for (Variable_definition v: function_definition.getVariable_definitions()) {
+            v.setGlobal(false);
+            v.accept(this, param);
+        }
         function_definition.statements().forEach(s -> s.accept(this, param));
 
 
