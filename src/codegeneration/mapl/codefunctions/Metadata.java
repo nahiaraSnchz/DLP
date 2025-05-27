@@ -5,6 +5,16 @@ package codegeneration.mapl.codefunctions;
 
 import ast.*;
 import ast.declaration.*;
+import ast.expression.Expression;
+import ast.statement.Assigment_statement;
+import ast.statement.Function_call_statement;
+import ast.statement.If_statement;
+import ast.statement.Print_statement;
+import ast.statement.Println_statement;
+import ast.statement.Printsp_statement;
+import ast.statement.Read_statement;
+import ast.statement.Return_statement;
+import ast.statement.While_statement;
 import ast.type.Array_type;
 import ast.type.Char_type;
 import ast.type.Int_type;
@@ -73,8 +83,6 @@ public class Metadata extends AbstractCodeFunction {
 
 		out("#type " + struct_definition.getName() + ": {");
 
-		// execute(struct_definition.variable_definitions());
-		//metadata(struct_definition.variable_definitions());
 		for (Variable_definition variables : struct_definition.getVariable_definitions()) {
 			out("\t" + variables.getName() + ":" + variables.getType().getMaplName( ""));
 		}
@@ -91,26 +99,91 @@ public class Metadata extends AbstractCodeFunction {
 		out("#FUNC " + function_definition.getName());
 		out("#RET " + function_definition.getType().getMaplName( ""));
 
-		// execute(function_definition.params());
-		// metadata(function_definition.params());
 
 		// PARAMETROS
 		for (Variable_definition parametros: function_definition.getParams()) {
 			out("#PARAM " + parametros.getName() + ":" + parametros.getType().getMaplName( ""));
 		}
 
-		// execute(function_definition.variable_definitions());
-		// metadata(function_definition.variable_definitions());
-
 		// VARIABLES LOCALES
 		for (Variable_definition variable : function_definition.getVariable_definitions()) {
 			metadata(variable);
 		}
 
-		// execute(function_definition.statements());
 
 		return null;
 	}
+
+	public Object visit (Assigment_statement assigment_statement, Object param) {
+		out("#line " + assigment_statement.start().getLine());
+		return null;
+	}
+
+
+	public Object visit(Return_statement return_statement, Object param) {
+
+		out("#line " + return_statement.start().getLine());
+		return null;
+
+	}
+
+
+	public Object visit(Print_statement print_statement, Object param) {
+
+		out("#line " + print_statement.start().getLine());
+
+		return null;
+	}
+
+
+	public Object visit(Printsp_statement printsp_statement, Object param) {
+
+		out("#line " + printsp_statement.start().getLine());
+
+		return null;
+	}
+
+
+	public Object visit(Println_statement println_statement, Object param) {
+		
+		//out("#line " + println_statement.start().getLine());
+		
+		return null;
+	}
+
+
+	public Object visit(Read_statement read_statement, Object param) {
+
+		out("#line " + read_statement.start().getLine());
+
+		return null;
+	}
+
+
+	public Object visit(While_statement while_statement, Object param) {
+		
+		out("#line " + while_statement.start().getLine());
+
+		return null;
+	}
+
+
+	public Object visit(If_statement if_statement, Object param) {
+		
+		out("#line " + if_statement.start().getLine());
+
+		return null;
+	}
+
+
+	public Object visit(Function_call_statement function_call_statement, Object param) {
+
+		out("#line " + function_call_statement.start().getLine());
+
+		return null;
+	}
+
+	
 
 
 	private boolean simpleType(Type type) {

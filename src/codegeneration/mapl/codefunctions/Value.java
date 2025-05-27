@@ -4,6 +4,7 @@ package codegeneration.mapl.codefunctions;
 
 import ast.expression.*;
 import ast.type.Array_type;
+import ast.type.Char_type;
 import codegeneration.mapl.*;
 
 
@@ -150,7 +151,7 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(CharE_literal charE_literal, Object param) {
 
-		out("pushb " + charE_literal.getName());
+		out("pushb " + (int)lexemeToChar(charE_literal.getName()));
 
 		return null;
 	}
@@ -161,15 +162,8 @@ public class Value extends AbstractCodeFunction {
 	@Override
 	public Object visit(Variable variable, Object param) {
 
-		
-
-		if (variable.isLvalue()) {
-			out("pusha " +  variable.getVariable_definition().getAddress());
-			out("load" + variable.getTypeExpression().getSuffix());
-		}
-		else {
-			out("push" + variable.getTypeExpression().getSuffix() + " " + variable.getName());
-		}
+		address(variable);
+		out("load" + variable.getTypeExpression().getSuffix());
 
 		return null;
 	}

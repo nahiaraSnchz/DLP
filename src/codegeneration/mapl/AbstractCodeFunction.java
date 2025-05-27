@@ -31,6 +31,7 @@ import visitor.ExceptionThrowerVisitor;
 public abstract class AbstractCodeFunction extends ExceptionThrowerVisitor {
 
     private MaplCodeSpecification specification;
+    private int etiqueta = 0;
 
     protected AbstractCodeFunction(MaplCodeSpecification specification) {
         this.specification = specification;
@@ -46,6 +47,39 @@ public abstract class AbstractCodeFunction extends ExceptionThrowerVisitor {
     protected void out(String line) {
         specification.getPrintWriter().println(line);
     }
+
+    protected String getEtiqueta() {
+        etiqueta += 1;
+        return String.valueOf("Etiqueta" + etiqueta);
+    }
+
+    public static char lexemeToChar(String str) {
+            if (str.length() == 3) {
+                // Ejemplo: 'a'
+                return str.charAt(1);
+            } else if (str.charAt(1) == '\\') {
+                char esc = str.charAt(2);
+                switch (esc) {
+                    case 'n': return '\n';
+                    case 't': return '\t';
+                    case 'r': return '\r';
+                    case '\'': return '\'';
+                    case '\"': return '\"';
+                    case '\\': return '\\';
+                    default:
+                        // ¿Es un número octal? (por ejemplo: '\126')
+                        String number = str.substring(2, str.length() - 1);
+                        try {
+                            int charCode = Integer.parseInt(number, 8); // base 8
+                            return (char) charCode;
+                        } catch (NumberFormatException e) {
+                            throw new IllegalArgumentException("Secuencia de escape no válida: \\" + esc);
+                        }
+                }
+            }
+
+            throw new IllegalArgumentException("Formato de lexema inválido: " + str);
+        }
 
     //# ------------------------------------------------------------------
     //# Método genérico para invocar cualquier función de código

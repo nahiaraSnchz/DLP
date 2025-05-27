@@ -21,7 +21,7 @@ program returns[Program ast] locals [List<Declaration> declarations = new ArrayL
 
 declaration returns[Declaration ast]
 	: variable_definition ';' { $ast = $variable_definition.ast; } 
-	| struct_definition ';' { $ast = $struct_definition.ast; }
+	| struct_definition  { $ast = $struct_definition.ast; }
 	| function_definition { $ast = $function_definition.ast; }
 	;
 
@@ -65,32 +65,21 @@ assignment returns[Assigment_statement ast]
 	;
 
 expression returns[Expression ast]
-	: exp1=expression '.' ID 
-	 { $ast = new Struct_access($exp1.ast, $ID); }
-	|'!' expression 
-	 { $ast = new Unary_expression($expression.ast); }
-	 | left=expression operador=('<' | '>' | '<=' | '>=' | '==' | '!=') right=expression
-	 { $ast = new Comparative_expression($left.ast, $operador, $right.ast); }
-	|left=expression operador=('&&' | '||') right=expression
-	 { $ast = new Logical_expression($left.ast, $operador, $right.ast); }
-	| left=expression operador=('+' | '-' | '*' | '/' | '%') right=expression
-	 { $ast = new Arythmetic_expression($left.ast, $operador, $right.ast); }
-	| '<' simpleType '>' expression
-	 { $ast = new Cast_expression($simpleType.ast, $expression.ast); }
-	| '(' expression ')'
-	 { $ast = new Parenthesized_expression($expression.ast); }
-	| ID '(' call_function ')'
-	 { $ast = new Expression_call($ID, $call_function.expressions); }
-	| left=expression '[' right=expression ']'
-	 { $ast = new Array_access($left.ast, $right.ast); }
-	| INT_LITERAL
-	 { $ast = new IntE_literal($INT_LITERAL); }
-	| INT_REAL
-	 { $ast = new IntE_real($INT_REAL); }
-	| CHAR_LITERAL
-	 { $ast = new CharE_literal($CHAR_LITERAL); }
-	| ID
-	 { $ast = new Variable($ID); }
+	: '<' simpleType '>' '(' expression ')'														{ $ast = new Cast_expression($simpleType.ast, $expression.ast); }
+	| exp1=expression '.' ID      																{ $ast = new Struct_access($exp1.ast, $ID); }
+	| left=expression '[' right=expression ']'													{ $ast = new Array_access($left.ast, $right.ast); }
+	| ID																						{ $ast = new Variable($ID); }
+	| ID '(' call_function ')'																	{ $ast = new Expression_call($ID, $call_function.expressions); }
+	| INT_LITERAL																				{ $ast = new IntE_literal($INT_LITERAL); }
+	| INT_REAL																					{ $ast = new IntE_real($INT_REAL); }
+	| CHAR_LITERAL																				{ $ast = new CharE_literal($CHAR_LITERAL); }
+	| '(' expression ')'																		{ $ast = new Parenthesized_expression($expression.ast); }
+	|'!' expression				 																{ $ast = new Unary_expression($expression.ast); }
+	| left=expression operador=('*' | '/' | '%') right=expression								{ $ast = new Arythmetic_expression($left.ast, $operador, $right.ast); }
+	| left=expression operador=('+' | '-' ) right=expression									{ $ast = new Arythmetic_expression($left.ast, $operador, $right.ast); }
+	| left=expression operador=('<' | '>' | '<=' | '>=' | '==' | '!=') right=expression			{ $ast = new Comparative_expression($left.ast, $operador, $right.ast); }
+	| left=expression '&&' right=expression														{ $ast = new Logical_expression($left.ast, "&&", $right.ast); }
+	| left=expression '||' right=expression														{ $ast = new Logical_expression($left.ast, "||", $right.ast); }
 	
 	;
 
@@ -124,11 +113,12 @@ function_definition returns[Function_definition ast] locals [List<Variable_defin
 
 
 simpleType returns[Type ast]
- 	: 'int' { $ast = new Int_type(); }
+ 	: '[' INT_LITERAL ']' simpleType { $ast = new Array_type($INT_LITERAL, $simpleType.ast); }
+	|'int' { $ast = new Int_type(); }
     | 'float' { $ast = new Real_type(); }
     | 'char' { $ast = new Char_type(); }
     | ID { $ast = new Struct_type($ID); }
-	| '[' INT_LITERAL ']' simpleType { $ast = new Array_type($INT_LITERAL, $simpleType.ast); }
+	
  ;
 
  type returns [Type ast]

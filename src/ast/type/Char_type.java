@@ -51,5 +51,7 @@ public class Char_type extends AbstractType  {
             return "b"; // Suffix for character type in MAPL
         }
 
+        
+
     // %% --------------------------------------
 }

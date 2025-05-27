@@ -71,6 +71,7 @@ public class Execute extends AbstractCodeFunction {
 	@Override
 	public Object visit(Return_statement return_statement, Object param) {
 
+		metadata(return_statement);
 		value(return_statement.getExpression());
 
 		return null;
@@ -81,6 +82,8 @@ public class Execute extends AbstractCodeFunction {
 	@Override
 	public Object visit(Print_statement print_statement, Object param) {
 
+		metadata(print_statement);
+
 		for (Expression expression : print_statement.getExpressions()) {
 			value(expression);
 			String outString = "out" +expression.getTypeExpression().getSuffix();
@@ -88,7 +91,6 @@ public class Execute extends AbstractCodeFunction {
 			
 		}
 
-		out("");
 
 		return null;
 	}
@@ -97,6 +99,8 @@ public class Execute extends AbstractCodeFunction {
 	// phase TypeChecking { Function_definition function }
 	@Override
 	public Object visit(Printsp_statement printsp_statement, Object param) {
+
+		metadata(printsp_statement);
 
 		if (! printsp_statement.getExpressions().isEmpty()) {
 			for (Expression expression : printsp_statement.getExpressions()) {
@@ -122,6 +126,9 @@ public class Execute extends AbstractCodeFunction {
 	// phase TypeChecking { Function_definition function }
 	@Override
 	public Object visit(Println_statement println_statement, Object param) {
+
+		metadata(println_statement);
+
 		// Si hay expresiones
 		if (!println_statement.getExpressions().isEmpty()) {
 			for (Expression expression : println_statement.getExpressions()) {
@@ -137,8 +144,6 @@ public class Execute extends AbstractCodeFunction {
 			out("pushb 10"); // "\n"
 			out("outb");
 		}
-
-		out("");
 		
 		return null;
 	}
@@ -148,8 +153,8 @@ public class Execute extends AbstractCodeFunction {
 	@Override
 	public Object visit(Read_statement read_statement, Object param) {
 
-		// value(read_statement.getExpression());
-		// address(read_statement.getExpression());
+		metadata(read_statement);
+
 		address(read_statement.getExpression());
 		String outString = "in" + read_statement.getExpression().getTypeExpression().getSuffix();
 		out(outString);
@@ -166,17 +171,20 @@ public class Execute extends AbstractCodeFunction {
 	@Override
 	public Object visit(While_statement while_statement, Object param) {
 
-		out("INICIOWHILE:"); // Etiqueta para el inicio del bucle while
+		metadata(while_statement);
+
+		String etInicio = getEtiqueta();
+		out(etInicio + ":"); // Etiqueta para el inicio del bucle while
 
 		value(while_statement.getExpression()); // Evaluar la expresión condicional
-		out("jz FUERAWHILE1"); // Si la expresión es falsa, saltar al final del bucle
+		String etFin = getEtiqueta();
+		out("jz " + etFin); // Si la expresión es falsa, saltar al final del bucle
 
 		while_statement.getStatements().forEach(st -> execute(st)); // Ejecutar las sentencias del bucle
-		out("jmp INICIOWHILE"); // Saltar al inicio del bucle para volver a evaluar la condición
+		out("jmp " + etInicio); // Saltar al inicio del bucle para volver a evaluar la condición
 
-		out("FUERAWHILE1:"); // Etiqueta para el final del bucle while
+		out(etFin + ":"); // Etiqueta para el final del bucle while
 
-		out("");
 
 		return null;
 	}
@@ -185,21 +193,33 @@ public class Execute extends AbstractCodeFunction {
 	// phase TypeChecking { Function_definition function }
 	@Override
 	public Object visit(If_statement if_statement, Object param) {
+		
+		metadata(if_statement);
 
 		value(if_statement.getExpression()); // Evaluar la expresión condicional
 
-		out("jz FUERAIF1"); // Si la expresión es falsa, saltar al final del bloque verdadero
+		String etElse = getEtiqueta();
+		String etEnd = getEtiqueta();
 
-		if_statement.getSt1().forEach(st -> execute(st)); // Ejecutar las sentencias del bloque verdadero
-
-
+		// si no hay bloque else, se salta al final del bloque if
 		if (if_statement.getSt2() != null && !if_statement.getSt2().isEmpty()) {
-			if_statement.getSt2().forEach(st -> execute(st)); // Ejecutar las sentencias del bloque falso
-		}
-		
-		out("FUERAIF1:"); // Etiqueta para el final del bloque if
+			out("jz " + etEnd); // Si la expresión es falsa, saltar al bloque falso
+			if_statement.getSt1().forEach(st -> execute(st)); // Ejecutar las sentencias del bloque verdadero
 
-		out("");
+			out( etEnd + ":"); // Etiqueta para el final del bloque if
+
+		} else {
+			out("jz " + etElse); // Si la expresión es falsa, saltar al bloque falso
+			if_statement.getSt1().forEach(st -> execute(st)); // Ejecutar las sentencias del bloque verdadero
+		
+		    out("jmp " + etEnd); // Saltar al final del bloque if
+
+			out(etElse + ":"); // Etiqueta para el bloque falso
+			if_statement.getSt2().forEach(st -> execute(st)); // Ejecutar las sentencias del bloque falso
+
+			out( etEnd + ":"); // Etiqueta para el final del bloque if
+
+		}
 
 		return null;
 	}
@@ -209,12 +229,12 @@ public class Execute extends AbstractCodeFunction {
 	@Override
 	public Object visit(Assigment_statement assigment_statement, Object param) {
 
+		metadata(assigment_statement);
+
 		address(assigment_statement.getLeft());
 		value(assigment_statement.getRight());
 
 		out("store" + assigment_statement.getLeft().getTypeExpression().getSuffix());
-
-		out("");
 
 		return null;
 	}
@@ -225,13 +245,18 @@ public class Execute extends AbstractCodeFunction {
 	@Override
 	public Object visit(Function_call_statement function_call_statement, Object param) {
 
+		metadata(function_call_statement);
+
 		function_call_statement.getExpressions().forEach(expression -> {
 			value(expression);
 		});
 
 		out("call " + function_call_statement.getName());
 
-		out("");
+		if (function_call_statement.getFunction_definition().getType().getSize() > 0) {
+			out("pop");
+		}
+
 
 		return null;
 	}

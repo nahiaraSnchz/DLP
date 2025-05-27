@@ -61,11 +61,6 @@ public class Address extends AbstractCodeFunction {
 	@Override
 	public Object visit(Parenthesized_expression parenthesized_expression, Object param) {
 
-		// value(parenthesized_expression.getExpression());
-		// address(parenthesized_expression.getExpression());
-
-		out("<instruction>");
-
 		return null;
 	}
 
@@ -74,7 +69,6 @@ public class Address extends AbstractCodeFunction {
 	// phase TypeChecking { Type typeExpression, boolean lvalue }
 	@Override
 	public Object visit(Expression_call expression_call, Object param) {
-
 
 		return null;
 	}
@@ -119,8 +113,6 @@ public class Address extends AbstractCodeFunction {
 	@Override
 	public Object visit(IntE_literal intE_literal, Object param) {
 
-		out("<instruction>");
-
 		return null;
 	}
 
@@ -129,7 +121,6 @@ public class Address extends AbstractCodeFunction {
 	@Override
 	public Object visit(IntE_real intE_real, Object param) {
 
-		out("<instruction>");
 
 		return null;
 	}
@@ -139,7 +130,6 @@ public class Address extends AbstractCodeFunction {
 	@Override
 	public Object visit(CharE_literal charE_literal, Object param) {
 
-		out("<instruction>");
 
 		return null;
 	}

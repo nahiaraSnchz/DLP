@@ -1,0 +1,106 @@
+// Programa de prueba exhaustivo
+
+// Variables globales
+var g1:int;
+var g2:float;
+var g3:char;
+
+struct Persona {
+    edad: int;
+    altura: float;
+    inicial: char;
+    datosExtra:[2]int;
+}
+
+var matriz:[3][2]float;
+var persona:Persona;
+var vector:[5]char;
+
+
+ suma(a:int, b:int):int {
+    var resultado:int;
+    resultado = a + b;
+    return resultado;
+}
+
+ maximo(a:int, b:int):int {
+    if (a > b) {
+        return a;
+    } else {
+        return b;
+    }
+    return 0;
+}
+
+ sinRetorno() {
+    var x:int;
+    x = 10;
+    printsp x;
+}
+
+main() {
+    var a:int;
+    var b:float;
+    var c:char;
+    var i:int;
+    var j:int;
+
+    a = 10;
+    b = 20.5;
+    c = 'Z';
+
+    g1 = suma(a, 5);
+    g2 = b;
+    g3 = '\n';
+
+    matriz[1][0] = 100.1;
+    matriz[1][1] = 200.2;
+
+    persona.edad = 25;
+    persona.altura = 1.75;
+    persona.inicial = 'A';
+    persona.datosExtra[0] = 99;
+    persona.datosExtra[1] = 88;
+
+    vector[0] = 'H';
+    vector[1] = 'o';
+    vector[2] = 'l';
+    vector[3] = 'a';
+    vector[4] = '!';
+
+    println g1, g2, g3;
+
+    // Mostrar contenido de la matriz
+    i = 0;
+    while (i < 3) {
+        j = 0;
+        while (j < 2) {
+            printsp matriz[i][j];
+            j = j + 1;
+        }
+        println;
+        i = i + 1;
+    }
+
+    println persona.edad, persona.altura, persona.inicial;
+    println persona.datosExtra[0], persona.datosExtra[1];
+
+    println vector[0], vector[1], vector[2], vector[3], vector[4];
+
+    // Comprobación de cast y expresiones lógicas
+    if (<int>(b) > 10 && a < 20) {
+        printsp 1;
+    } else {
+        printsp 0;
+    }
+
+    printsp !0;       // Debe imprimir 1
+    printsp a % 3;    // Módulo
+    printsp a * 2 + 3;
+
+    // Función sin valor de retorno
+    sinRetorno();
+
+    // Conversión explícita
+    println <float>(g1);
+}
