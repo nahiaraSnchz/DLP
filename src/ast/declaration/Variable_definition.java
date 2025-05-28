@@ -32,7 +32,7 @@ public class Variable_definition extends AbstractDeclaration  {
 	private Type type;
 
     // PHASE Identification
-	private boolean global = true;
+	private boolean global;
 
     // PHASE MemoryAllocation
 	private int address;

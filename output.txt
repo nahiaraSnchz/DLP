@@ -1,16 +1,12 @@
-#SOURCE "test_ejemplo_gen_cod.txt"
-#GLOBAL g1:int
-#GLOBAL g2:float
-#GLOBAL g3:char
-#type Persona: {
-	edad:int
-	altura:float
-	inicial:char
-	datosExtra:2*int
+#SOURCE "test_generacion_codigo_final.txt"
+#LOCAL a:int
+#LOCAL b:float
+#type Punto: {
+	x:float
+	y:float
 }
-#GLOBAL matriz:3*2*float
-#GLOBAL persona:Persona
-#GLOBAL vector:5*char
+#LOCAL v:5*int
+#LOCAL p:Punto
 call main
 halt
 
@@ -18,480 +14,97 @@ halt
 
 
 
-
-
-suma:
-#FUNC suma
-#RET int
-#PARAM a:int
-#PARAM b:int
-#LOCAL resultado:int
-enter 2
-#line 22
+main:
+#FUNC main
+#RET VOID
+#line 26
 pusha bp
-pushi -2
+pushi 0
 add
-pusha bp
-pushi 6
-add
-loadi
-pusha bp
-pushi 4
-add
-loadi
-addi
+pushi 1111
 storei
-#line 23
-pusha bp
-pushi -2
-add
-loadi
-ret 2, 2, 4
-
-
-maximo:
-#FUNC maximo
-#RET int
-#PARAM a:int
-#PARAM b:int
 #line 27
 pusha bp
-pushi 6
+pushi 2
 add
-loadi
-pusha bp
-pushi 4
-add
-loadi
-gti
-jz Etiqueta2
+pushf 2222.2
+storef
 #line 28
 pusha bp
 pushi 6
 add
+pushi 3
+pushi 2
+mul
+add
+pushi 3333
+storei
+#line 29
+pusha bp
+pushi 16
+add
+pushi 4
+addi
+pushf 4444.4
+storef
+#line 31
+pusha bp
+pushi 0
+add
 loadi
-Etiqueta2:
+outi
+pushb 32
+outb
+
 #line 32
-pushi 0
-ret 2, 0, 4
-
-
-sinRetorno:
-#FUNC sinRetorno
-#RET VOID
-#LOCAL x:int
-enter 2
-#line 37
 pusha bp
-pushi -2
-add
-pushi 10
-storei
-#line 38
-pusha bp
-pushi -2
-add
-loadi
-outi
-pushb 32
-outb
-
-ret 0, 2, 0
-
-
-main:
-#FUNC main
-#RET VOID
-#LOCAL a:int
-#LOCAL b:float
-#LOCAL c:char
-#LOCAL i:int
-#LOCAL j:int
-enter 11
-#line 48
-pusha bp
-pushi -2
-add
-pushi 10
-storei
-#line 49
-pusha bp
-pushi -6
-add
-pushf 20.5
-storef
-#line 50
-pusha bp
-pushi -7
-add
-pushb 90
-storeb
-#line 52
-pusha 0
-pusha bp
-pushi -2
-add
-loadi
-pushi 5
-call suma
-storei
-#line 53
-pusha 2
-pusha bp
-pushi -6
+pushi 2
 add
 loadf
-storef
-#line 54
-pusha 6
-pushb 10
-storeb
-#line 56
-pusha 7
-pushi 1
-pushi 8
-mul
+pusha bp
+pushi 16
 add
-pushi 0
 pushi 4
-mul
-add
-pushf 100.1
-storef
-#line 57
-pusha 7
-pushi 1
-pushi 8
-mul
-add
-pushi 1
-pushi 4
-mul
-add
-pushf 200.2
-storef
-#line 59
-pusha 31
-pushi 0
 addi
-pushi 25
-storei
-#line 60
-pusha 31
-pushi 2
-addi
-pushf 1.75
-storef
-#line 61
-pusha 31
-pushi 6
-addi
-pushb 65
-storeb
-#line 62
-pusha 31
-pushi 7
-addi
-pushi 0
-pushi 2
-mul
-add
-pushi 99
-storei
-#line 63
-pusha 31
-pushi 7
-addi
-pushi 1
-pushi 2
-mul
-add
-pushi 88
-storei
-#line 65
-pusha 42
-pushi 0
-pushi 1
-mul
-add
-pushb 72
-storeb
-#line 66
-pusha 42
-pushi 1
-pushi 1
-mul
-add
-pushb 111
-storeb
-#line 67
-pusha 42
-pushi 2
-pushi 1
-mul
-add
-pushb 108
-storeb
-#line 68
-pusha 42
-pushi 3
-pushi 1
-mul
-add
-pushb 97
-storeb
-#line 69
-pusha 42
-pushi 4
-pushi 1
-mul
-add
-pushb 33
-storeb
-pusha 0
-loadi
-outi
-pushb 10
-outb
-pusha 2
 loadf
-outf
-pushb 10
-outb
-pusha 6
-loadb
-outb
-pushb 10
-outb
-#line 74
-pusha bp
-pushi -9
-add
-pushi 0
-storei
-#line 75
-Etiqueta3:
-pusha bp
-pushi -9
-add
-loadi
-pushi 3
-lti
-jz Etiqueta4
-#line 76
-pusha bp
-pushi -11
-add
-pushi 0
-storei
-#line 77
-Etiqueta5:
-pusha bp
-pushi -11
-add
-loadi
-pushi 2
-lti
-jz Etiqueta6
-#line 78
-pusha 7
-pusha bp
-pushi -9
-add
-loadi
-pushi 8
-mul
-add
-pusha bp
-pushi -11
-add
-loadi
-pushi 4
-mul
-add
-loadf
+addf
 outf
 pushb 32
 outb
 
-#line 79
 pusha bp
-pushi -11
-add
-pusha bp
-pushi -11
-add
-loadi
-pushi 1
-addi
-storei
-jmp Etiqueta5
-Etiqueta6:
-pushb 10
-outb
-#line 82
-pusha bp
-pushi -9
-add
-pusha bp
-pushi -9
-add
-loadi
-pushi 1
-addi
-storei
-jmp Etiqueta3
-Etiqueta4:
-pusha 31
-pushi 0
-addi
-loadi
-outi
-pushb 10
-outb
-pusha 31
-pushi 2
-addi
-loadf
-outf
-pushb 10
-outb
-pusha 31
 pushi 6
-addi
-loadb
-outb
-pushb 10
-outb
-pusha 31
-pushi 7
-addi
-pushi 0
-pushi 2
-mul
 add
-loadi
-outi
-pushb 10
-outb
-pusha 31
-pushi 7
-addi
-pushi 1
-pushi 2
-mul
-add
-loadi
-outi
-pushb 10
-outb
-pusha 42
-pushi 0
-pushi 1
-mul
-add
-loadb
-outb
-pushb 10
-outb
-pusha 42
-pushi 1
-pushi 1
-mul
-add
-loadb
-outb
-pushb 10
-outb
-pusha 42
-pushi 2
-pushi 1
-mul
-add
-loadb
-outb
-pushb 10
-outb
-pusha 42
 pushi 3
-pushi 1
+pushi 2
 mul
 add
-loadb
-outb
+loadi
+outi
 pushb 10
 outb
-pusha 42
-pushi 4
-pushi 1
-mul
-add
-loadb
-outb
-pushb 10
-outb
-#line 91
+#line 35
 pusha bp
-pushi -6
+pushi 0
+add
+loadi
+pushi 0
+gti
+pusha bp
+pushi 2
+add
+loadf
+pushf 3333.3
+ltf
+and
+outi
+#line 36
+pusha bp
+pushi 2
 add
 loadf
 f2i
-pushi 10
-gti
-pusha bp
-pushi -2
-add
-loadi
-pushi 20
-lti
-and
-jz Etiqueta8
-#line 92
-pushi 1
 outi
-pushb 32
-outb
-
-Etiqueta8:
-#line 97
-pushi 0
-not
-outi
-pushb 32
-outb
-
-#line 98
-pusha bp
-pushi -2
-add
-loadi
-pushi 3
-modi
-outi
-pushb 32
-outb
-
-#line 99
-pusha bp
-pushi -2
-add
-loadi
-pushi 2
-muli
-pushi 3
-addi
-outi
-pushb 32
-outb
-
-#line 102
-call sinRetorno
-pusha 0
-loadi
-i2f
-outf
-pushb 10
-outb
-ret 0, 11, 0
+ret 0, 0, 0
 
 

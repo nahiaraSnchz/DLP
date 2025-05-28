@@ -12,18 +12,22 @@ import Tokenizer;
 }
 
 
-program returns[Program ast] locals [List<Declaration> declarations = new ArrayList<>()]
+program returns[Program ast] locals [List<Declaration> declarations = new ArrayList<>(), List<Variable_definition> variable_definitions = new ArrayList<>(), List<Statement> statements = new ArrayList<>()]
 	: (operator1=variable_definition ';' {$declarations.add($operator1.ast);} 
 	| operator2=struct_definition {$declarations.add($operator2.ast);} 
 	| operator3=function_definition {$declarations.add($operator3.ast);}
-	  )* EOF{$ast = new Program($declarations);}
+	  )* 
+	  'main' '(' ')' '{' (variable_definition ';' {$variable_definitions.add($variable_definition.ast);})* (s1=statement {$statements.add($s1.ast);})* '}'      {$declarations.add(new Function_definition("main", null, new Void_type(), $variable_definitions, $statements));}
+	  EOF{$ast = new Program($declarations);}
     ;
+
 
 declaration returns[Declaration ast]
 	: variable_definition ';' { $ast = $variable_definition.ast; } 
 	| struct_definition  { $ast = $struct_definition.ast; }
 	| function_definition { $ast = $function_definition.ast; }
 	;
+
 
 statement returns[Statement ast] locals [List<Expression> expressions = new ArrayList<>(), List<Statement> statements1 = new ArrayList<>(), List<Statement> statements2 = new ArrayList<>()]
 	: 'return' ';'

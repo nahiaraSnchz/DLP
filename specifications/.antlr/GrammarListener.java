@@ -1,4 +1,11 @@
-// Generated from c:/Users/nahia/OneDrive/Escritorio/U N I/3 UNI/2do Semestre/Diseño de Lenguajes de Programación/Practica/DLP_language/mlang_nahiaraSanchez/specifications/Grammar.g4 by ANTLR 4.13.1
+// Generated from c:/Users/nahia/OneDrive/Escritorio/U N I/3 UNI/2do Semestre/DLP/Practica/DLP_myLanguage/DLP/specifications/Grammar.g4 by ANTLR 4.13.1
+
+    import ast.*;
+	import ast.type.*;
+	import ast.declaration.*;
+	import ast.statement.*;
+	import ast.expression.*;
+
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -16,6 +23,66 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitProgram(GrammarParser.ProgramContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclaration(GrammarParser.DeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclaration(GrammarParser.DeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatement(GrammarParser.StatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatement(GrammarParser.StatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlock(GrammarParser.BlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlock(GrammarParser.BlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#call_function}.
+	 * @param ctx the parse tree
+	 */
+	void enterCall_function(GrammarParser.Call_functionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#call_function}.
+	 * @param ctx the parse tree
+	 */
+	void exitCall_function(GrammarParser.Call_functionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignment(GrammarParser.AssignmentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignment(GrammarParser.AssignmentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpression(GrammarParser.ExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpression(GrammarParser.ExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#variable_definition}.
 	 * @param ctx the parse tree
@@ -37,25 +104,25 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitStruct_definition(GrammarParser.Struct_definitionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GrammarParser#struct_variable}.
+	 * Enter a parse tree produced by {@link GrammarParser#function_definition}.
 	 * @param ctx the parse tree
 	 */
-	void enterStruct_variable(GrammarParser.Struct_variableContext ctx);
+	void enterFunction_definition(GrammarParser.Function_definitionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GrammarParser#struct_variable}.
+	 * Exit a parse tree produced by {@link GrammarParser#function_definition}.
 	 * @param ctx the parse tree
 	 */
-	void exitStruct_variable(GrammarParser.Struct_variableContext ctx);
+	void exitFunction_definition(GrammarParser.Function_definitionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GrammarParser#base_type}.
+	 * Enter a parse tree produced by {@link GrammarParser#simpleType}.
 	 * @param ctx the parse tree
 	 */
-	void enterBase_type(GrammarParser.Base_typeContext ctx);
+	void enterSimpleType(GrammarParser.SimpleTypeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GrammarParser#base_type}.
+	 * Exit a parse tree produced by {@link GrammarParser#simpleType}.
 	 * @param ctx the parse tree
 	 */
-	void exitBase_type(GrammarParser.Base_typeContext ctx);
+	void exitSimpleType(GrammarParser.SimpleTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#type}.
 	 * @param ctx the parse tree
@@ -66,14 +133,4 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitType(GrammarParser.TypeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link GrammarParser#array_type}.
-	 * @param ctx the parse tree
-	 */
-	void enterArray_type(GrammarParser.Array_typeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link GrammarParser#array_type}.
-	 * @param ctx the parse tree
-	 */
-	void exitArray_type(GrammarParser.Array_typeContext ctx);
 }
